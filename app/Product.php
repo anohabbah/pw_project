@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
+    use Categorizable;
+
     protected $guarded = [];
 
     /**
@@ -14,13 +16,5 @@ class Product extends Model
     public function media()
     {
         return $this->morphMany(Media::class, 'subject');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
     }
 }

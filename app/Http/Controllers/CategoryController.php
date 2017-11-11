@@ -41,14 +41,14 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'parent_id' => 'sometimes',
+            'category_id' => 'nullable|exists:categories,id',
             'name' => 'required|string',
         ]);
 
-        if ($parent = $data['parent_id']) {
+        if ($parent = $data['category_id']) {
             /** @var Category $parent */
             $parent = Category::findOrfail($parent);
-            $parent->subCategories()->create([
+            $parent->addChildCategory([
                 'name' => $data['name'],
                 'slug' => str_slug($data['name']),
             ]);
@@ -93,7 +93,13 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required'
+        ]);
+
+        $category->update($data);
+
+        return redirect()->route('categories.index');
     }
 
     /**
@@ -104,6 +110,8 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        $category->delete();
+
+        return redirect()->route('categories.index');
     }
 }
