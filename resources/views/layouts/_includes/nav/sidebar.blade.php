@@ -7,8 +7,10 @@
             Catégories
         </p>
         <ul class="menu-list">
-            <li><a>Listes des Catégories</a></li>
-            <li><a>Ajouter une Catégorie</a></li>
+            <li><a href="{{ route('categories.index') }}"
+                   class="{{ page_active('categories.index') }}">Listes des Catégories</a></li>
+            <li><a href="{{ route('categories.create') }}"
+                   class="{{ page_active('categories.create') }}">Ajouter une Catégorie</a></li>
         </ul>
         <p class="menu-label">
             Producteurs

@@ -29,7 +29,9 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::whereNull('category_id')->orderBy('name')->get();
+
+        return view('categories.create')->with('categories', $categories);
     }
 
     /**

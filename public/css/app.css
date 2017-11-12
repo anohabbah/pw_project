@@ -14201,8 +14201,12 @@ label.panel-block:hover {
   padding-left: 1.15em;
 }
 
-body {
-  height: 100vh;
+.select {
+  width: 100%;
+}
+
+.select select {
+  width: 100%;
 }
 
 .sidebar {
