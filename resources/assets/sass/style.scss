@@ -1,8 +1,11 @@
+body {
+  height: 100vh;
+}
 .sidebar {
   position: fixed;
   width: 210px;
   height: 100%;
-  z-index: 30;
+  z-index: 29;
   background: #363A41;
   left: 0;
   display: block;
@@ -24,7 +27,7 @@
   margin: 0;
   position: fixed;
   top: 52px;
-  z-index: 29;
+  z-index: 28;
   background-color: #fff;
   border-bottom: #dfdfdf 1px solid;
   color: #363a41;

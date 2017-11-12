@@ -14,7 +14,7 @@
     </section>
 
     <div class="columns is-marginless is-centered">
-        <div class="column is-5">
+        <div class="column is-one-third-desktop is-two-thirds-tablet">
             <div class="card">
                 <header class="card-header">
                     <p class="card-header-title">Connexion</p>
