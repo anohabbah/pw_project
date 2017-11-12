@@ -1,67 +1,34 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="{{ app()->getLocale() }}"
+    @auth() class="has-navbar-fixed-top" @endauth>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{{ page_title($title ?? '') }}</title>
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        @auth()
+            @include('layouts._includes.nav')
+            @include('layouts._includes.nav.sidebar')
+        @endauth
 
-        <!-- CSRF Token -->
-        <meta name="csrf-token" content="{{ csrf_token() }}">
-
-        <title>{{ page_title($title ?? '') }}</title>
-
-        <!-- Styles -->
-        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    </head>
-    <body>
-        <div id="app">
-            @auth()
-                <nav class="navbar has-shadow">
+        <div id="content">
+            <section class="hero page-header">
+                <div class="hero-body">
                     <div class="container">
-                        <div class="navbar-brand">
-                            <a href="{{ url('/') }}" class="navbar-item">{{ config('app.name', 'Laravel') }}</a>
-
-                            <div class="navbar-burger burger" data-target="navMenu">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </div>
-                        </div>
-
-                        <div class="navbar-menu" id="navMenu">
-                            <div class="navbar-start"></div>
-
-                            <div class="navbar-end">
-                                @if (Auth::guest())
-                                    <a class="navbar-item " href="{{ route('login') }}">Login</a>
-                                    <a class="navbar-item " href="{{ route('register') }}">Register</a>
-                                @else
-                                    <div class="navbar-item has-dropdown is-hoverable">
-                                        <a class="navbar-link" href="#">{{ Auth::user()->name }}</a>
-
-                                        <div class="navbar-dropdown">
-                                            <a class="navbar-item" href="{{ route('logout') }}"
-                                               onclick="event.preventDefault();document.getElementById('logout-form').submit();">
-                                                Logout
-                                            </a>
-
-                                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                                  style="display: none;">
-                                                {{ csrf_field() }}
-                                            </form>
-                                        </div>
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
+                        <h1 class="title">{{ $title }}</h1>
+                        <h2 class="subtitle">{{ $subtitle }}</h2>
                     </div>
-                </nav>
-            @endauth
-
+                </div>
+            </section>
             @yield('content')
         </div>
+    </div>
 
-        <!-- Scripts -->
-        <script src="{{ asset('js/app.js') }}"></script>
-    </body>
+    <script src="{{ asset('js/app.js') }}"></script>
+</body>
 </html>

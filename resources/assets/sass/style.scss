@@ -1,0 +1,36 @@
+.sidebar {
+  position: fixed;
+  width: 210px;
+  height: 100%;
+  z-index: 30;
+  background: #363A41;
+  left: 0;
+  display: block;
+}
+.menu {
+  margin: 10px 0 0 0;
+}
+#content {
+  margin-left: 210px;
+  padding: 120px 10px 0;
+  transition-property: margin;
+  transition-duration: .4s;
+  transition-timing-function: ease out;
+}
+.page-header {
+  width: 100%;
+  height: 100px;
+  padding: 0;
+  margin: 0;
+  position: fixed;
+  top: 52px;
+  z-index: 29;
+  background-color: #fff;
+  border-bottom: #dfdfdf 1px solid;
+  color: #363a41;
+  left: 0;
+
+  &.hero .hero-body {
+    padding: 26px 0 0 230px;
+  }
+}

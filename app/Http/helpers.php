@@ -7,5 +7,5 @@ function page_title(string $title)
 
 function page_active(string $route_name)
 {
-    return Route::is($route_name) ? ' is-active' : '';
+    return Route::is($route_name) ? 'is-active' : '';
 }
