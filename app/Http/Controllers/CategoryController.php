@@ -19,7 +19,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        $categories = Category::list();
+
+        return view('categories.index')->with('categories', $categories);
     }
 
     /**
@@ -42,22 +44,22 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
+        $request->validate([
             'category_id' => 'nullable|exists:categories,id',
             'name' => 'required|string',
         ]);
 
-        if ($parent = $data['category_id']) {
+        if ($request->has('category_id')) {
             /** @var Category $parent */
-            $parent = Category::findOrfail($parent);
+            $parent = Category::findOrfail($request->input('category_id'));
             $parent->addChildCategory([
-                'name' => $data['name'],
-                'slug' => str_slug($data['name']),
+                'name' => ucwords($request->input('name')),
+                'slug' => str_slug($request->input('name')),
             ]);
         } else {
             $cat = new Category();
-            $cat->name = $data['name'];
-            $cat->slug = str_slug($data['name']);
+            $cat->name = ucwords($request->input('name'));
+            $cat->slug = str_slug($request->input('name'));
             $cat->save();
         }
 

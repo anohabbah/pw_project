@@ -37,11 +37,20 @@ class CreateCategoryTest extends TestCase
         $this->signIn();
 
         $cat = factory(Category::class)->raw();
+        unset($cat['category_id']);
 
         $this->post(route('categories.store'), $cat)
             ->assertRedirect(route('categories.index'));
 
-        $this->assertDatabaseHas('categories', ['name' => $cat['name'], 'slug' => $cat['slug']]);
+        $this->assertDatabaseHas('categories', $cat);
+
+
+        $cat = factory(Category::class)->raw(['category_id' => $this->cat->id]);
+
+        $this->post(route('categories.store'), $cat)
+            ->assertRedirect(route('categories.index'));
+
+        $this->assertDatabaseHas('categories', $cat);
     }
 
     /** @test */
@@ -60,7 +69,7 @@ class CreateCategoryTest extends TestCase
         $this->publishCategory(['category_id' => $this->cat->id])
             ->assertRedirect(route('categories.index'));
 
-        $this->assertCount(1, $this->cat->refresh()->subCategories);
+        $this->assertCount(1, $this->cat->refresh()->children);
     }
 
     /** @test */
@@ -79,9 +88,12 @@ class CreateCategoryTest extends TestCase
         $this->withExceptionHandling()
             ->signIn();
 
-        $category = factory(Category::class)->make($overrides);
+        $category = factory(Category::class)->raw($overrides);
+        if (!array_has($overrides, 'category_id')) {
+            unset($category['category_id']);
+        }
 
-        return $this->post(route('categories.store'), $category->toArray());
+        return $this->post(route('categories.store'), $category);
     }
 
     /** @test */
@@ -114,7 +126,7 @@ class CreateCategoryTest extends TestCase
         $child = factory(Category::class)->create(['category_id' => $this->cat->id]);
         $prod = factory(Product::class)->create(['category_id' => $this->cat->id]);
 
-        $this->assertCount(1, $this->cat->subCategories);
+        $this->assertCount(1, $this->cat->children);
         $this->assertCount(1, $this->cat->products);
 
         $this->delete(route('categories.destroy', $this->cat));

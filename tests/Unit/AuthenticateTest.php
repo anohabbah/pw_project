@@ -16,6 +16,6 @@ class AuthenticateTest extends TestCase
         $user = factory(User::class)->create();
 
         $this->post(route('login'), ['email' => $user->email, 'password' => 'secret'])
-            ->assertRedirect(route('home'));
+            ->assertRedirect(route('dashboard'));
     }
 }

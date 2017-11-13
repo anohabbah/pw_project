@@ -33,9 +33,9 @@ class CategoryTest extends TestCase
     {
         $child = factory(Category::class)->create(['category_id' => $this->cat->id]);
 
-        $this->assertInstanceOf(Collection::class, $this->cat->subCategories);
-        $this->assertCount(1, $this->cat->subCategories);
-        $this->assertTrue($this->cat->subCategories->contains($child));
+        $this->assertInstanceOf(Collection::class, $this->cat->children);
+        $this->assertCount(1, $this->cat->children);
+        $this->assertTrue($this->cat->children->contains($child));
     }
 
     /** @test */
@@ -52,6 +52,19 @@ class CategoryTest extends TestCase
             'slug' => 'foobar'
         ]);
 
-        $this->assertCount(1, $this->cat->subCategories);
+        $this->assertCount(1, $this->cat->children);
+    }
+
+    /** @test */
+    public function categories_can_be_fetch_by_api_request()
+    {
+        $this->signIn();
+
+        factory(Category::class, 20)->create(['category_id' => $this->cat->id]);
+
+        $response = $this->getJson('/api/categories')->json();
+
+        $this->assertCount(1, $response);
+        $this->assertCount(20, $response[0]['children']);
     }
 }
