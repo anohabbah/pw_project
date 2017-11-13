@@ -24,79 +24,32 @@
                     <form class="login-form" method="POST" action="{{ route('login') }}">
                         {{ csrf_field() }}
 
-                        <div class="field is-horizontal">
-                            <div class="field-label">
-                                <label for="email" class="label">Adresse Email</label>
-                            </div>
+                        <b-field label="Email"
+                                {{ $errors->has('email') ? 'type="is-danger" message="' . $errors->first('email') . '"' : '' }}>
+                            <b-input name="email" type="email" required autofocus></b-input>
+                        </b-field>
 
+
+                        <b-field label="Mot de Passe"
+                                {{ $errors->has('password') ? 'type="is-danger" message="' . $errors->first('password') . '"' : '' }}>
+                            <b-input type="password" required name="password" password-reveal></b-input>
+                        </b-field>
+
+                        <b-field>
                             <div class="field-body">
-                                <div class="field">
-                                    <p class="control">
-                                        <input class="input" id="email" type="email" name="email"
-                                               value="{{ old('email') }}" required autofocus>
-                                    </p>
-
-                                    @if ($errors->has('email'))
-                                        <p class="help is-danger">
-                                            {{ $errors->first('email') }}
-                                        </p>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="field is-horizontal">
-                            <div class="field-label">
-                                <label for="password" class="label">Mot de Passe</label>
-                            </div>
-
-                            <div class="field-body">
-                                <div class="field">
-                                    <p class="control">
-                                        <input class="input" id="password" type="password" name="password" required>
-                                    </p>
-
-                                    @if ($errors->has('password'))
-                                        <p class="help is-danger">
-                                            {{ $errors->first('password') }}
-                                        </p>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="field is-horizontal">
-                            <div class="field-label"></div>
-
-                            <div class="field-body">
-                                <div class="field">
-                                    <p class="control">
-                                        <label class="checkbox">
-                                            <input type="checkbox"
-                                                   name="remember" {{ old('remember') ? 'checked' : '' }}> Se Souvenir de Moi
-                                        </label>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="field is-horizontal">
-                            <div class="field-label"></div>
-
-                            <div class="field-body">
-                                <div class="field is-grouped">
+                                <div class="field is-group">
                                     <div class="control">
-                                        <button type="submit" class="button is-primary">Se Connecter</button>
-                                    </div>
-
-                                    <div class="control">
-                                        <a href="{{ route('password.request') }}">
-                                            Mot de passe oublié?
-                                        </a>
+                                        <b-checkbox name="remember" {{ old('remember') ? 'checked' : '' }}>Garder la
+                                            session
+                                        </b-checkbox>
+                                        <a class="is-pulled-right" href="{{ route('password.request') }}">Mot de passe
+                                            oublié?</a>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </b-field>
+
+                        <button type="submit" class="button is-primary" style="width: 100%">Se Connecter</button>
                     </form>
                 </div>
             </div>

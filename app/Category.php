@@ -21,6 +21,11 @@ class Category extends Model
             ->simplePaginate(2);
     }
 
+    public static function parents()
+    {
+        return static::whereNull('category_id')->orderBy('name')->get();
+    }
+
     protected static function boot()
     {
         parent::boot();

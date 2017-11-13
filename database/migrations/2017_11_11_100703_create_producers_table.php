@@ -18,7 +18,6 @@ class CreateProducersTable extends Migration
             $table->string('address');
             $table->boolean('address_visibility')->default(false);
             $table->text('presentation');
-            $table->text('view');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class CategoryController extends Controller
 {
@@ -31,9 +32,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $categories = Category::whereNull('category_id')->orderBy('name')->get();
-
-        return view('categories.create')->with('categories', $categories);
+        return view('categories.create')->with('categories', $this->getCategories());
     }
 
     /**
@@ -63,6 +62,7 @@ class CategoryController extends Controller
             $cat->save();
         }
 
+        Session::flash('flash', 'Catégorie ajoutée avec succès !');
         return redirect()->route('categories.index');
     }
 
@@ -85,7 +85,9 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        return view('categories.edit')
+            ->with('category', $category)
+            ->with('categories', $this->getCategories());
     }
 
     /**
@@ -103,6 +105,7 @@ class CategoryController extends Controller
 
         $category->update($data);
 
+        Session::flash('flash', 'Mise à jour réussie !');
         return redirect()->route('categories.index');
     }
 
@@ -116,6 +119,15 @@ class CategoryController extends Controller
     {
         $category->delete();
 
+        Session::flash('flash', 'Suppression réussie !');
         return redirect()->route('categories.index');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCategories()
+    {
+        return Category::parents();
     }
 }

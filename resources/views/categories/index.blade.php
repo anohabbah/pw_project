@@ -27,15 +27,26 @@
                                     <td>{{ $category->id }}</td>
                                     <td colspan="2">{{ $category->name }}</td>
                                     <td>
-                                        <a href="#">
-                                            <b-icon icon="mode_edit"></b-icon>
-                                        </a>
-                                        <a href="#">
-                                            <b-icon icon="remove_red_eye"></b-icon>
-                                        </a>
-                                        <a href="#">
-                                            <b-icon icon="delete_forever"></b-icon>
-                                        </a>
+                                        <b-tooltip label="Modifier">
+                                            <a href="{{ route('categories.edit', $category) }}"><b-icon icon="mode_edit"></b-icon></a>
+                                        </b-tooltip>
+
+                                        <b-tooltip label="Aperçu">
+                                            <a href="#">
+                                                <b-icon icon="remove_red_eye"></b-icon>
+                                            </a>
+                                        </b-tooltip>
+
+                                        <b-tooltip label="Supprimer">
+                                            <a href="{{ route('categories.destroy', $category) }}"
+                                               onclick="event.preventDefault();document.getElementById('delete-form-' + '{{ $category->id }}').submit();">
+                                                <b-icon icon="delete_forever"></b-icon>
+                                            </a>
+                                            <form id="delete-form-{{ $category->id }}" action="{{ route('logout') }}" method="POST"
+                                                  style="display: none;">
+                                                {{ csrf_field() }}
+                                            </form>
+                                        </b-tooltip>
                                     </td>
                                 </tr>
 
@@ -45,15 +56,26 @@
                                         <td></td>
                                         <td>{{ $child->name }}</td>
                                         <td>
-                                            <a href="#">
-                                                <b-icon icon="mode_edit"></b-icon>
-                                            </a>
-                                            <a href="#">
-                                                <b-icon icon="remove_red_eye"></b-icon>
-                                            </a>
-                                            <a href="#">
-                                                <b-icon icon="delete_forever"></b-icon>
-                                            </a>
+                                            <b-tooltip label="Modifier">
+                                                <a href="{{ route('categories.edit', $child) }}"><b-icon icon="mode_edit"></b-icon></a>
+                                            </b-tooltip>
+
+                                            <b-tooltip label="Aperçu">
+                                                <a href="#">
+                                                    <b-icon icon="remove_red_eye"></b-icon>
+                                                </a>
+                                            </b-tooltip>
+
+                                            <b-tooltip label="Supprimer">
+                                                <a href="{{ route('categories.destroy', $child) }}"
+                                                   onclick="event.preventDefault();document.getElementById('delete-form-' + '{{ $child->id }}').submit();">
+                                                    <b-icon icon="delete_forever"></b-icon>
+                                                </a>
+                                                <form id="delete-form-{{ $child->id }}" action="{{ route('logout') }}" method="POST"
+                                                      style="display: none;">
+                                                    {{ csrf_field() }}
+                                                </form>
+                                            </b-tooltip>
                                         </td>
                                     </tr>
                                 @endforeach
