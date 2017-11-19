@@ -14,10 +14,10 @@ class CreateMediaTable extends Migration
     public function up()
     {
         Schema::create('media', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->unsignedInteger('subject_id');
-            $table->string('subject_type');
+            $table->increments('id_media');
+            $table->string('url', 100);
+            $table->unsignedInteger('id_producteur')->nullable();
+            $table->unsignedInteger('id_produit')->nullable();
             $table->timestamps();
         });
     }
