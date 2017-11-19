@@ -17,11 +17,11 @@
         <div class="column is-one-third-desktop is-two-thirds-tablet">
             <div class="card">
                 <header class="card-header">
-                    <p class="card-header-title">Connexion</p>
+                    <p class="card-header-title is-centered is-uppercase">Connexion</p>
                 </header>
 
                 <div class="card-content">
-                    <form class="login-form" method="POST" action="{{ route('login') }}">
+                    <form id="login_form" class="login-form" method="POST" action="{{ route('login') }}">
                         {{ csrf_field() }}
 
                         <b-field label="Email"
@@ -48,9 +48,13 @@
                                 </div>
                             </div>
                         </b-field>
-
-                        <button type="submit" class="button is-primary" style="width: 100%">Se Connecter</button>
                     </form>
+                </div>
+
+                <div class="card-footer">
+                    <a href="{{ route('login') }}" class="card-footer-item is-uppercase has-text-weight-light"
+                       onclick="event.preventDefault();document.getElementById('login_form').submit();"
+                    >Se Connecter</a>
                 </div>
             </div>
         </div>
