@@ -42,9 +42,10 @@
                                                onclick="event.preventDefault();document.getElementById('delete-form-' + '{{ $category->id }}').submit();">
                                                 <b-icon icon="delete_forever"></b-icon>
                                             </a>
-                                            <form id="delete-form-{{ $category->id }}" action="{{ route('logout') }}" method="POST"
+                                            <form id="delete-form-{{ $category->id }}" action="{{ route('categories.destroy', $category) }}" method="POST"
                                                   style="display: none;">
                                                 {{ csrf_field() }}
+                                                {{ method_field('delete') }}
                                             </form>
                                         </b-tooltip>
                                     </td>
@@ -71,9 +72,10 @@
                                                    onclick="event.preventDefault();document.getElementById('delete-form-' + '{{ $child->id }}').submit();">
                                                     <b-icon icon="delete_forever"></b-icon>
                                                 </a>
-                                                <form id="delete-form-{{ $child->id }}" action="{{ route('logout') }}" method="POST"
+                                                <form id="delete-form-{{ $child->id }}" action="{{ route('categories.destroy', $child) }}" method="POST"
                                                       style="display: none;">
                                                     {{ csrf_field() }}
+                                                    {{ method_field('delete') }}
                                                 </form>
                                             </b-tooltip>
                                         </td>
