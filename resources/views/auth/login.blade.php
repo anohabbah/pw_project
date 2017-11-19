@@ -53,8 +53,7 @@
 
                 <div class="card-footer">
                     <a href="{{ route('login') }}" class="card-footer-item is-uppercase has-text-weight-light"
-                       onclick="event.preventDefault();document.getElementById('login_form').submit();"
-                    >Se Connecter</a>
+                       onclick="event.preventDefault();document.getElementById('login_form').submit();">Se Connecter</a>
                 </div>
             </div>
         </div>
