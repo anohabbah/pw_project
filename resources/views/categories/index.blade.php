@@ -24,8 +24,8 @@
                             <tbody>
                             @foreach($categories as $category)
                                 <tr class="is-selected">
-                                    <td>{{ $category->id }}</td>
-                                    <td colspan="2">{{ $category->name }}</td>
+                                    <td>{{ $category->id_categorie }}</td>
+                                    <td colspan="2">{{ $category->nom_categorie }}</td>
                                     <td>
                                         <b-tooltip label="Modifier">
                                             <a href="{{ route('categories.edit', $category) }}"><b-icon icon="mode_edit"></b-icon></a>
@@ -42,7 +42,7 @@
                                                onclick="event.preventDefault();document.getElementById('delete-form-' + '{{ $category->id }}').submit();">
                                                 <b-icon icon="delete_forever"></b-icon>
                                             </a>
-                                            <form id="delete-form-{{ $category->id }}" action="{{ route('categories.destroy', $category) }}" method="POST"
+                                            <form id="delete-form-{{ $category->id_categorie }}" action="{{ route('categories.destroy', $category) }}" method="POST"
                                                   style="display: none;">
                                                 {{ csrf_field() }}
                                                 {{ method_field('delete') }}
@@ -53,9 +53,9 @@
 
                                 @foreach($category->children as $child)
                                     <tr>
-                                        <td>{{ $child->id }}</td>
+                                        <td>{{ $child->id_categorie }}</td>
                                         <td></td>
-                                        <td>{{ $child->name }}</td>
+                                        <td>{{ $child->nom_categorie }}</td>
                                         <td>
                                             <b-tooltip label="Modifier">
                                                 <a href="{{ route('categories.edit', $child) }}"><b-icon icon="mode_edit"></b-icon></a>
@@ -72,7 +72,7 @@
                                                    onclick="event.preventDefault();document.getElementById('delete-form-' + '{{ $child->id }}').submit();">
                                                     <b-icon icon="delete_forever"></b-icon>
                                                 </a>
-                                                <form id="delete-form-{{ $child->id }}" action="{{ route('categories.destroy', $child) }}" method="POST"
+                                                <form id="delete-form-{{ $child->id_categorie }}" action="{{ route('categories.destroy', $child) }}" method="POST"
                                                       style="display: none;">
                                                     {{ csrf_field() }}
                                                     {{ method_field('delete') }}

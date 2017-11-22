@@ -15,8 +15,8 @@
                             <form action="" method="post" id="prod_form">
                                 {{ csrf_field() }}
 
-                                <div class="columns is-desktop">
-                                    <div class="column is-5">
+                                <div class="columns">
+                                    <div class="column is-half-desktop">
                                         <b-field label="Nom du producteur"
                                                 {{ $errors->has('nom') ? 'type="is-danger" message="' . $errors->first('nom') . '"' : ''}}>
                                             <b-input name="nom" required
@@ -93,8 +93,8 @@
                                     </div>
                                 </div>
 
-                                <div class="colums is-desktop">
-                                    <div class="column is-6">
+                                <div class="columns">
+                                    <div class="column is-three-quarters-desktop">
                                         <b-field
                                                 label="Parlez-nous du producteur"
                                                 {{ $errors->has('bio') ? 'type="is-danger" message="' . $errors->first('bio') . '"' : ''}}>

@@ -1,7 +1,8 @@
 @extends('layouts.app', ['title' => 'Catégories', 'subtitle' => 'Ajouter une nouvelle catégorie'])
 
 @section('content')
-    <cat-create-view inline-template v-cloak>
+    <cat-create-view {{ old('f_id_categorie') ? ':current="' . old('f_id_categorie') . '"' : '' }}
+                     :data="{{ $categories }}" inline-template v-cloak>
         <div class="columns">
             <div class="column is-half-desktop">
                 <div class="card">
@@ -25,10 +26,11 @@
                                         {{ $errors->has('f_id_categorie') ? 'type="is-danger" message="' . $errors->first('f_id_categorie') . '"' : ''}}
                                         label="Catégories"
                                         message="Ne selectionner que si vous voulez defenir la nouvelle catégorie comme une sous catégorie d'une autre">
-                                    <b-select placeholder="Sélectionner une catégorie (optionnel)" name="f_id_categorie">
+                                    <b-select placeholder="Sélectionner une catégorie (optionnel)"
+                                              v-model="categorySelected" name="f_id_categorie">
                                         <option
                                                 v-for="category in categories"
-                                                :value="category.id"
+                                                :value="category.id_categorie"
                                                 :key="category.id_categorie"
                                                 v-text="category.nom_categorie"
                                         ></option>

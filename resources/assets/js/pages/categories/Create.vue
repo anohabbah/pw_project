@@ -1,9 +1,10 @@
 <script>
     export default {
-        props: ['data'],
+        props: ['data', 'current'],
         data() {
             return {
-                categories: this.data
+                categories: this.data,
+                categorySelected: this.current
             }
         }
     }
