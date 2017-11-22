@@ -1,7 +1,7 @@
 @extends('layouts.app', ['title' => 'Catégories', 'subtitle' => 'Modifier la catégorie: '. $category->name])
 
 @section('content')
-    <cat-create-view :data="{{ $categories }}" inline-template v-cloak>
+    <cat-create-view :current="{{ old('category_id', $category->category_id) }}" :data="{{ $categories }}" inline-template v-cloak>
         <div class="columns">
             <div class="column is-half-desktop">
                 <div class="card">
@@ -26,7 +26,9 @@
                                         {{ $errors->has('category_id') ? 'type="is-danger" message="' . $errors->first('category_id') . '"' : ''}}
                                         label="Catégories"
                                         message="Ne selectionner que si vous voulez defenir la nouvelle catégorie comme une sous catégorie d'une autre">
-                                    <b-select placeholder="Sélectionner une catégorie (optionnel)" name="category_id">
+                                    <b-select placeholder="Sélectionner une catégorie (optionnel)"
+                                              v-model="categoryId"
+                                              name="category_id">
                                         <option
                                                 v-for="category in categories"
                                                 :value="category.id"
@@ -39,7 +41,7 @@
                         </div>
                     </div>
                     <footer class="card-footer">
-                        <a class="card-footer-item" href="{{ route('categories.index') }}" class="button is-white">Annuler</a>
+                        <a class="card-footer-item" href="{{ route('categories.index') }}">Annuler</a>
                         <a class="card-footer-item" href="#"
                            onclick="event.preventDefault();document.getElementById('categ_form').submit();">Enregistrer</a>
                     </footer>

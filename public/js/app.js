@@ -40482,10 +40482,11 @@ module.exports = Component.exports
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['data'],
+    props: ['data', 'current'],
     data: function data() {
         return {
-            categories: this.data
+            categories: this.data,
+            categoryId: this.current
         };
     }
 });
