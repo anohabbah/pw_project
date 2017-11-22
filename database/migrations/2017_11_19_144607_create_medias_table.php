@@ -13,12 +13,14 @@ class CreateMediaTable extends Migration
      */
     public function up()
     {
-        Schema::create('media', function (Blueprint $table) {
+        Schema::create('medias', function (Blueprint $table) {
             $table->increments('id_media');
             $table->string('url', 100);
             $table->unsignedInteger('id_producteur')->nullable();
             $table->unsignedInteger('id_produit')->nullable();
-            $table->timestamps();
+
+            $table->foreign('id_producteur')->references('id_producteur')->on('producteurs')->onDelete('cascade');
+            $table->foreign('id_produit')->references('id_produit')->on('produits')->onDelete('cascade');
         });
     }
 
@@ -29,6 +31,6 @@ class CreateMediaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('media');
+        Schema::dropIfExists('medias');
     }
 }

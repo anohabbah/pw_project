@@ -15,17 +15,16 @@ class CreateProducteursTable extends Migration
     {
         Schema::create('producteurs', function (Blueprint $table) {
             $table->increments('id_producteur');
-            $table->string('adresse');
+            $table->string('nom', 100);
+            $table->string('adresse', 100);
             $table->boolean('adresse_visible')->default(false);
-            $table->string('nom');
-            $table->string('telephone');
-            $table->string('email');
+            $table->string('telephone', 25);
+            $table->string('email', 100)->unique();
             $table->string('mot_de_passe');
             $table->text('bio');
-            $table->boolean('state')->default(false);
-            $table->string('long', 30)->nullable();
-            $table->string('lat', 30)->nullable();
-            $table->timestamps();
+            $table->boolean('actif')->default(false);
+            $table->float('longitude', 10)->nullable();
+            $table->float('latitude', 10)->nullable();
         });
     }
 
