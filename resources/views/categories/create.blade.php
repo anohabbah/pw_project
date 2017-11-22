@@ -15,22 +15,22 @@
                             <form id="categ_form" action="{{ route('categories.store') }}" method="post">
                                 {{ csrf_field() }}
                                 <b-field label="Intitulé de la catégorie"
-                                        {{ $errors->has('name') ? 'type="is-danger" message="' . $errors->first('name') . '"' : ''}}>
-                                    <b-input maxlength="50" name="name" required
-                                             value="{{ old('name') }}"
+                                        {{ $errors->has('nom_categorie') ? 'type="is-danger" message="' . $errors->first('nom_categorie') . '"' : ''}}>
+                                    <b-input maxlength="100" name="nom_categorie" required
+                                             value="{{ old('nom_categorie') }}"
                                              placeholder="Indiquer ici l'intitulé de la nouvelle catégorie"></b-input>
                                 </b-field>
 
                                 <b-field
-                                        {{ $errors->has('category_id') ? 'type="is-danger" message="' . $errors->first('category_id') . '"' : ''}}
+                                        {{ $errors->has('f_id_categorie') ? 'type="is-danger" message="' . $errors->first('f_id_categorie') . '"' : ''}}
                                         label="Catégories"
                                         message="Ne selectionner que si vous voulez defenir la nouvelle catégorie comme une sous catégorie d'une autre">
-                                    <b-select placeholder="Sélectionner une catégorie (optionnel)" name="category_id">
+                                    <b-select placeholder="Sélectionner une catégorie (optionnel)" name="f_id_categorie">
                                         <option
                                                 v-for="category in categories"
                                                 :value="category.id"
-                                                :key="category.id"
-                                                v-text="category.name"
+                                                :key="category.id_categorie"
+                                                v-text="category.nom_categorie"
                                         ></option>
                                     </b-select>
                                 </b-field>

@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => 'Catégories', 'subtitle' => 'Modifier la catégorie: '. $category->name])
+@extends('layouts.app', ['title' => 'Catégories', 'subtitle' => 'Modifier la catégorie: '. $category->nom_categorie])
 
 @section('content')
     <cat-create-view :data="{{ $categories }}" inline-template v-cloak>
@@ -15,23 +15,24 @@
                             <form id="categ_form" action="{{ route('categories.update', $category) }}" method="post">
                                 {{ csrf_field() }}
                                 {{ method_field('patch') }}
+
                                 <b-field label="Intitulé de la catégorie"
-                                        {{ $errors->has('name') ? 'type="is-danger" message="' . $errors->first('name') . '"' : ''}}>
-                                    <b-input maxlength="50" name="name" required autofocus
-                                             value="{{ old('name', $category->name) }}"
+                                        {{ $errors->has('nom_categorie') ? 'type="is-danger" message="' . $errors->first('nom_categorie') . '"' : ''}}>
+                                    <b-input maxlength="100" name="nom_categorie" required autofocus
+                                             value="{{ old('nom_categorie', $category->nom_categorie) }}"
                                              placeholder="Indiquer ici l'intitulé de la nouvelle catégorie"></b-input>
                                 </b-field>
 
                                 <b-field
-                                        {{ $errors->has('category_id') ? 'type="is-danger" message="' . $errors->first('category_id') . '"' : ''}}
+                                        {{ $errors->has('f_id_category') ? 'type="is-danger" message="' . $errors->first('f_id_category') . '"' : ''}}
                                         label="Catégories"
                                         message="Ne selectionner que si vous voulez defenir la nouvelle catégorie comme une sous catégorie d'une autre">
-                                    <b-select placeholder="Sélectionner une catégorie (optionnel)" name="category_id">
+                                    <b-select placeholder="Sélectionner une catégorie (optionnel)" name="f_id_category">
                                         <option
                                                 v-for="category in categories"
-                                                :value="category.id"
-                                                :key="category.id"
-                                                v-text="category.name"
+                                                :value="category.id_category"
+                                                :key="category.id_category"
+                                                v-text="category.nom_categorie"
                                         ></option>
                                     </b-select>
                                 </b-field>
@@ -41,7 +42,7 @@
                     <footer class="card-footer">
                         <a class="card-footer-item" href="{{ route('categories.index') }}" class="button is-white">Annuler</a>
                         <a class="card-footer-item" href="#"
-                           onclick="event.preventDefault();document.getElementById('categ_form').submit();">Enregistrer</a>
+                           onclick="event.preventDefault();document.getElementById('categ_form').submit();">Enregistrer les modifications</a>
                     </footer>
                 </div>
             </div>
