@@ -16,6 +16,6 @@ trait Categorizable
      */
     public function category()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class, 'f_id_categorie', 'id_categorie');
     }
 }

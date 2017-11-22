@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Category;
-use App\Product;
+use App\Produit;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
@@ -37,7 +37,7 @@ class CreateCategoryTest extends TestCase
         $this->signIn();
 
         $cat = factory(Category::class)->raw();
-        unset($cat['category_id']);
+        unset($cat['f_id_categorie']);
 
         $this->post(route('categories.store'), $cat)
             ->assertRedirect(route('categories.index'));
@@ -45,7 +45,7 @@ class CreateCategoryTest extends TestCase
         $this->assertDatabaseHas('categories', $cat);
 
 
-        $cat = factory(Category::class)->raw(['category_id' => $this->cat->id]);
+        $cat = factory(Category::class)->raw(['f_id_categorie' => $this->cat->id_categorie]);
 
         $this->post(route('categories.store'), $cat)
             ->assertRedirect(route('categories.index'));
@@ -56,8 +56,8 @@ class CreateCategoryTest extends TestCase
     /** @test */
     public function a_category_requires_a_name()
     {
-        $this->publishCategory(['name' => null])
-            ->assertSessionHasErrors('name');
+        $this->publishCategory(['nom_categorie' => null])
+            ->assertSessionHasErrors('nom_categorie');
     }
 
     /** @test */
@@ -66,7 +66,7 @@ class CreateCategoryTest extends TestCase
         $this->publishCategory()
             ->assertRedirect(route('categories.index'));
 
-        $this->publishCategory(['category_id' => $this->cat->id])
+        $this->publishCategory(['f_id_categorie' => $this->cat->id_categorie])
             ->assertRedirect(route('categories.index'));
 
         $this->assertCount(1, $this->cat->refresh()->children);
@@ -75,8 +75,8 @@ class CreateCategoryTest extends TestCase
     /** @test */
     public function a_sub_category_requires_a_valid_parent()
     {
-        $this->publishCategory(['category_id' => 2])
-            ->assertSessionHasErrors('category_id');
+        $this->publishCategory(['f_id_categorie' => 2])
+            ->assertSessionHasErrors('f_id_categorie');
     }
 
     /**
@@ -89,8 +89,8 @@ class CreateCategoryTest extends TestCase
             ->signIn();
 
         $category = factory(Category::class)->raw($overrides);
-        if (!array_has($overrides, 'category_id')) {
-            unset($category['category_id']);
+        if (!array_has($overrides, 'f_id_categorie')) {
+            unset($category['f_id_categorie']);
         }
 
         return $this->post(route('categories.store'), $category);
@@ -102,9 +102,10 @@ class CreateCategoryTest extends TestCase
         $this->signIn();
 
         $str = 'new name';
-        $this->patch(route('categories.update', $this->cat), ['name' => $str]);
+        $this->patch(route('categories.update', $this->cat), ['nom_categorie' => $str]);
 
-        $this->assertDatabaseHas('categories', ['id' => $this->cat->id, 'name' => $str]);
+        $this->assertDatabaseHas('categories',
+            ['id_categorie' => $this->cat->id_categorie, 'nom_categorie' => $str]);
     }
 
     /** @test */
@@ -123,16 +124,16 @@ class CreateCategoryTest extends TestCase
     {
         $this->signIn();
 
-        $child = factory(Category::class)->create(['category_id' => $this->cat->id]);
-        $prod = factory(Product::class)->create(['category_id' => $this->cat->id]);
+        $child = factory(Category::class)->create(['f_id_categorie' => $this->cat->id_categorie]);
+        $prod = factory(Produit::class)->create(['id_categorie' => $this->cat->id_categorie]);
 
         $this->assertCount(1, $this->cat->children);
-        $this->assertCount(1, $this->cat->products);
+        $this->assertCount(1, $this->cat->produits);
 
         $this->delete(route('categories.destroy', $this->cat));
 
-        $this->assertDatabaseMissing('categories', ['id' => $this->cat->id]);
-        $this->assertDatabaseMissing('categories', ['id' => $child->id]);
-        $this->assertDatabaseMissing('products', ['id' => $prod->id]);
+        $this->assertDatabaseMissing('categories', ['id_categorie' => $this->cat->id_categorie]);
+        $this->assertDatabaseMissing('categories', ['id_categorie' => $child->id_categorie]);
+        $this->assertDatabaseMissing('produits', ['id_produit' => $prod->id_produit]);
     }
 }
