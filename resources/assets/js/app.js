@@ -14,6 +14,7 @@ Vue.use(Buefy);
 Vue.component('flash', require('./components/FlashComponent.vue'));
 
 Vue.component('cat-create-view', require('./pages/categories/Create.vue'));
+Vue.component('prod-create-view', require('./pages/producers/Create.vue'));
 
 const app = new Vue({
     el: '#app'

@@ -17,7 +17,7 @@
         </p>
         <ul class="menu-list">
             <li><a>Listes des Producteurs</a></li>
-            <li><a>Ajouter un Producteur</a></li>
+            <li><a href="{{ route('producers.create') }}" class="{{ page_active('producers.create') }}">Ajouter un Producteur</a></li>
         </ul>
         <p class="menu-label">
             Administration

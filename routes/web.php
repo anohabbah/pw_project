@@ -18,3 +18,5 @@ Auth::routes();
 Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
 
 Route::resource('categories', 'CategoryController');
+
+Route::resource('producers', 'ProducteurController');
