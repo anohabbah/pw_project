@@ -11,4 +11,13 @@ class Media extends Model
     protected $table = 'medias';
 
     public $timestamps = false;
+
+    /**
+     * Media may belong to a producteur.
+     *
+     */
+    public function producteur()
+    {
+        return $this->belongsTo(Producteur::class, 'id_producteur', 'id_producteur');
+    }
 }

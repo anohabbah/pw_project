@@ -12,7 +12,7 @@
                     </div>
                     <div class="card-content">
                         <div class="content">
-                            <form action="" method="post" id="prod_form">
+                            <form action="{{ route('producers.store') }}" method="post" id="prod_form" enctype="multipart/form-data">
                                 {{ csrf_field() }}
 
                                 <div class="columns">
@@ -20,20 +20,16 @@
                                         <b-field label="Nom du producteur"
                                                 {{ $errors->has('nom') ? 'type="is-danger" message="' . $errors->first('nom') . '"' : ''}}>
                                             <b-input name="nom" required
+                                                     maxLength="100"
                                                      value="{{ old('nom') }}"></b-input>
                                         </b-field>
 
                                         <b-field label="Photo de Profil du producteur">
                                             <b-upload v-model="dropFiles"
-                                                      drag-drop>
+                                                      name="avatar" drag-drop>
                                                 <section class="section">
                                                     <div class="content has-text-centered">
-                                                        <p>
-                                                            <b-icon
-                                                                    icon="add_a_photo"
-                                                                    size="is-large">
-                                                            </b-icon>
-                                                        </p>
+                                                        <p><b-icon icon="add_a_photo" size="is-large"></b-icon></p>
                                                         <p>Glisser & Deposer ou Clicker pour télécharger une image</p>
                                                     </div>
                                                 </section>
@@ -54,31 +50,32 @@
 
                                         <b-field label="Adresse électronique"
                                                 {{ $errors->has('email') ? 'type="is-danger" message="' . $errors->first('email') . '"' : ''}}>
-                                            <b-input name="email" required
+                                            <b-input name="email" required maxLength="100"
                                                      value="{{ old('email') }}"></b-input>
                                         </b-field>
                                         <b-field
                                                 label="Mot de passe"
                                                 {{ $errors->has('password') ?
                                                 'type="is-danger" message="' . $errors->first('password') . '"' : ''}}>
-                                            <b-input type="password" name="password"></b-input>
+                                            <b-input type="password" required minLength="6" :has-counter="false"
+                                                     password-reveal name="mot_de_passe"></b-input>
                                         </b-field>
                                         <b-field label="Confirmer le mot de passe">
-                                            <b-input type="password"
-                                                     name="password_confirmation"></b-input>
+                                            <b-input type="password" required password-reveal
+                                                     name="mot_de_passe_confirmation"></b-input>
                                         </b-field>
 
                                         <b-field label="Adresse postale du producteur"
-                                                {{ $errors->has('address') ?
-                                          'type="is-danger" message="' . $errors->first('address') . '"' : ''}}>
-                                            <b-input type="text" name="address"></b-input>
+                                                {{ $errors->has('adresse') ?
+                                          'type="is-danger" message="' . $errors->first('adresse') . '"' : ''}}>
+                                            <b-input type="text" required name="adresse"></b-input>
                                         </b-field>
                                         <b-field>
                                             <b-tooltip
                                                     label="Activer ou desactiver la visibilité de l'adresse du producteur sur le site">
                                                 <b-switch
                                                         v-model="addressState"
-                                                        name="address_visibility"
+                                                        name="adresse_visible"
                                                         true-value="Visible"
                                                         false-value="Non Visible">@{{ addressState }}
                                                 </b-switch>
@@ -87,18 +84,18 @@
 
                                         <b-field label="Numéro de téléphone"
                                                 {{ $errors->has('telephone') ? 'type="is-danger" message="' . $errors->first('telephone') . '"' : ''}}>
-                                            <b-input name="telephone"
+                                            <b-input name="telephone" required
                                                      value="{{ old('telephone') }}"></b-input>
                                         </b-field>
                                     </div>
                                 </div>
 
                                 <div class="columns">
-                                    <div class="column is-three-quarters-desktop">
+                                    <div class="column is-half-desktop">
                                         <b-field
                                                 label="Parlez-nous du producteur"
                                                 {{ $errors->has('bio') ? 'type="is-danger" message="' . $errors->first('bio') . '"' : ''}}>
-                                            <b-input type="textarea" placeholder="Une petite description ?"
+                                            <b-input type="textarea" required maxLength="300" placeholder="Une petite description ?"
                                                      name="bio"></b-input>
                                         </b-field>
                                     </div>
@@ -111,7 +108,7 @@
                                                 <b-switch :value="true"
                                                           size="is-medium"
                                                           v-model="accountState"
-                                                          name="state"
+                                                          name="actif"
                                                           true-value="Compte Activé"
                                                           false-value="Compte Non Activé"
                                                           type="is-info">

@@ -40,7 +40,22 @@ class ProducteurController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'nom' => 'required|string|max:100',
+            'email' => 'required|string|email|max:255|unique:producteurs',
+            'mot_de_passe' => 'required|string|min:6|confirmed',
+            'adresse' => 'required|string|max:100',
+            'telephone' => 'required|string|max:25',
+            'bio' => 'required',
+        ]);
+
+        /** @var Producteur $producteur */
+        $producteur = Producteur::create($data);
+
+        // Active/Desactive le compte et active/desactive la visibilité de l'adresse du producteut
+        $producteur->updateStates($request->filled('actif'), $request->filled('adresse_visible'));
+
+        return redirect()->route('producers.show', $producteur);
     }
 
     /**
