@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\UploadedFile;
 
 class Media extends Model
 {
@@ -19,5 +20,17 @@ class Media extends Model
     public function producteur()
     {
         return $this->belongsTo(Producteur::class, 'id_producteur', 'id_producteur');
+    }
+
+    /**
+     * @param UploadedFile $file
+     * @return $this
+     */
+    public function uploadFile(UploadedFile $file)
+    {
+        $this->url = $file->storePublicly('producteurs', ['disk' => 'public']);
+        $this->save();
+
+        return $this;
     }
 }

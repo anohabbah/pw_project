@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Producteur extends Model
 {
+    protected $fillable = [
+        'nom', 'adresse', 'adresse_visible', 'email', 'mot_de_passe',
+        'telephone', 'longitude', 'latitude', 'bio', 'actif'
+    ];
+
     /**
      * @inherited
      */

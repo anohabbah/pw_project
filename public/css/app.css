@@ -14193,6 +14193,23 @@ label.panel-block:hover {
   padding-right: 100px !important;
 }
 
+.is-circle {
+  border-radius: 100% !important;
+}
+
+.img-circle {
+  border: 1px solid #dedede;
+  background-color: #fff;
+  padding: 3px;
+  border-radius: 100% !important;
+}
+
+.profile-pic {
+  display: block;
+  width: 100px;
+  height: 100px;
+}
+
 .menu-label {
   margin-left: 0.75em;
 }
@@ -14265,5 +14282,6 @@ label.panel-block:hover {
   bottom: 0;
   left: 13.125rem;
   right: 0;
+  z-index: 5;
 }
 

@@ -2,14 +2,24 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 import Buefy from 'buefy';
+Vue.use(Buefy);
+
+import * as VueGoogleMaps from 'vue2-google-maps'
+Vue.use(VueGoogleMaps, {
+    load: {
+        key: 'AIzaSyAiTDLF-TUKkzbnLoXSUpUh75TmvcuIkoE',
+        libraries: 'places', // This is required if you use the Autocomplete plugin
+        // OR: libraries: 'places,drawing'
+        // OR: libraries: 'places,drawing,visualization'
+        // (as you require)
+    }
+});
 
 
 window.events = new Vue();
 window.flash = function (message) {
     window.events.$emit('flash', message);
 };
-
-Vue.use(Buefy);
 
 Vue.component('flash', require('./components/FlashComponent.vue'));
 

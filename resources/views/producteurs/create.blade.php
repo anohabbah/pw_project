@@ -1,7 +1,14 @@
 @extends('layouts.app', ['title' => 'Producteurs', 'subtitle' => 'Ajouter un producteur'])
 
 @section('content')
-    <prod-create-view inline-template v-cloak>
+    <prod-create-view
+            inline-template v-cloak
+            {{ old('avatar') ? ':profile-avatar="' . old('avatar') . '"' : '' }}
+            {{ old('lng') ? ':lng="' . old('lng') . '"' : '' }}
+            {{ old('latitude') ? ':lati="' . old('latitude') . '"' : '' }}
+            {{ old('longitude') ? ':lati="' . old('longitude') . '"' : '' }}
+            {{ old('adresse_visible') ? ':adresse-visible="' . old('adresse_visible') . '"' : '' }}
+            {{ old('actif') ? ':actif="' . old('actif') . '"' : '' }}>
         <div class="colums producers-page">
             <div class="column">
                 <div class="card">
@@ -12,51 +19,59 @@
                     </div>
                     <div class="card-content">
                         <div class="content">
-                            <form action="{{ route('producers.store') }}" method="post" id="prod_form" enctype="multipart/form-data">
+                            <form action="{{ route('producers.store') }}" method="post" id="prod_form"
+                                  enctype="multipart/form-data">
                                 {{ csrf_field() }}
+
+                                <input type="hidden" name="avatar" :value="id_media">
+                                <input type="hidden" name="longitude" :value="long">
+                                <input type="hidden" name="latitude" :value="lat">
 
                                 <div class="columns">
                                     <div class="column is-half-desktop">
+                                        <b-field
+                                                {{ $errors->has('avatar') ?
+                                                'type="is-danger" message="' . $errors->first('avatar') . '"' : ''}}>
+                                            <b-tooltip label="Ajouter un photo" position="is-right">
+                                                <a class="button is-primary is-large is-circle" @click="toggleShow">
+                                                    <b-icon icon="add_a_photo" type="is-medium"></b-icon>
+                                                </a>
+                                            </b-tooltip>
+                                            <image-upload
+                                                    field="avatar"
+                                                    @crop-success="cropSuccess"
+                                                    @crop-upload-success="cropUploadSuccess"
+                                                    @crop-upload-fail="cropUploadFail"
+                                                    v-model="show"
+                                                    :width="300"
+                                                    :height="300"
+                                                    url="{{ route('media.store') }}"
+                                                    :headers="headers"
+                                                    lang-type="fr"
+                                                    img-format="png"></image-upload>
+                                            <a @click="toggleShow">
+                                                <img class="profile-pic img-circle" :src="imgDataUrl" v-if="imgDataUrl">
+                                            </a>
+                                        </b-field>
+
                                         <b-field label="Nom du producteur"
-                                                {{ $errors->has('nom') ? 'type="is-danger" message="' . $errors->first('nom') . '"' : ''}}>
+                                                {!! $errors->has('nom') ?
+                                                'type="is-danger" message="' . $errors->first('nom') . '"' : '' !!}>
                                             <b-input name="nom" required
                                                      maxLength="100"
                                                      value="{{ old('nom') }}"></b-input>
                                         </b-field>
 
-                                        <b-field label="Photo de Profil du producteur">
-                                            <b-upload v-model="dropFiles"
-                                                      name="avatar" drag-drop>
-                                                <section class="section">
-                                                    <div class="content has-text-centered">
-                                                        <p><b-icon icon="add_a_photo" size="is-large"></b-icon></p>
-                                                        <p>Glisser & Deposer ou Clicker pour télécharger une image</p>
-                                                    </div>
-                                                </section>
-                                            </b-upload>
-                                        </b-field>
-
-                                        <div class="tags">
-                                            <span v-for="(file, index) in dropFiles"
-                                                  :key="index"
-                                                  class="tag is-primary">
-                                                @{{ file.name }}
-                                                <button class="delete is-small"
-                                                        type="button"
-                                                        @click="deleteDropFile(index)">
-                                                </button>
-                                            </span>
-                                        </div>
-
                                         <b-field label="Adresse électronique"
-                                                {{ $errors->has('email') ? 'type="is-danger" message="' . $errors->first('email') . '"' : ''}}>
+                                                {!! $errors->has('email') ?
+                                                'type="is-danger" message="' . $errors->first('email') . '"' : '' !!}>
                                             <b-input name="email" required maxLength="100"
                                                      value="{{ old('email') }}"></b-input>
                                         </b-field>
                                         <b-field
                                                 label="Mot de passe"
-                                                {{ $errors->has('password') ?
-                                                'type="is-danger" message="' . $errors->first('password') . '"' : ''}}>
+                                                {!! $errors->has('mot_de_passe') ?
+                                                'type="is-danger" message="' . $errors->first('mot_de_passe') . '"' : '' !!}>
                                             <b-input type="password" required minLength="6" :has-counter="false"
                                                      password-reveal name="mot_de_passe"></b-input>
                                         </b-field>
@@ -66,9 +81,15 @@
                                         </b-field>
 
                                         <b-field label="Adresse postale du producteur"
-                                                {{ $errors->has('adresse') ?
-                                          'type="is-danger" message="' . $errors->first('adresse') . '"' : ''}}>
-                                            <b-input type="text" required name="adresse"></b-input>
+                                                {!! $errors->has('adresse') ?
+                                          'type="is-danger" message="' . $errors->first('adresse') . '"' : '' !!}>
+                                            <div class="control is-clearfix">
+                                                <gmap-autocomplete
+                                                        class="input"
+                                                        name="adresse"
+                                                        value="{{ old('adresse') }}"
+                                                        @place_changed="setPlace"></gmap-autocomplete>
+                                            </div>
                                         </b-field>
                                         <b-field>
                                             <b-tooltip
@@ -77,13 +98,15 @@
                                                         v-model="addressState"
                                                         name="adresse_visible"
                                                         true-value="Visible"
-                                                        false-value="Non Visible">@{{ addressState }}
+                                                        false-value="Non Visible">
+                                                    @{{ addressState }}
                                                 </b-switch>
                                             </b-tooltip>
                                         </b-field>
 
                                         <b-field label="Numéro de téléphone"
-                                                {{ $errors->has('telephone') ? 'type="is-danger" message="' . $errors->first('telephone') . '"' : ''}}>
+                                                {!! $errors->has('telephone') ?
+                                                'type="is-danger" message="' . $errors->first('telephone') . '"' : '' !!}>
                                             <b-input name="telephone" required
                                                      value="{{ old('telephone') }}"></b-input>
                                         </b-field>
@@ -94,8 +117,11 @@
                                     <div class="column is-half-desktop">
                                         <b-field
                                                 label="Parlez-nous du producteur"
-                                                {{ $errors->has('bio') ? 'type="is-danger" message="' . $errors->first('bio') . '"' : ''}}>
-                                            <b-input type="textarea" required maxLength="300" placeholder="Une petite description ?"
+                                                {!! $errors->has('bio') ?
+                                                'type="is-danger" message="' . $errors->first('bio') . '"' : '' !!}>
+                                            <b-input type="textarea" required maxLength="300"
+                                                     placeholder="Parlez-nous de lui..."
+                                                     value="{{ old('bio') }}"
                                                      name="bio"></b-input>
                                         </b-field>
                                     </div>
@@ -111,13 +137,13 @@
                                                           name="actif"
                                                           true-value="Compte Activé"
                                                           false-value="Compte Non Activé"
-                                                          type="is-info">
-                                                    @{{ accountState }}
-                                                </b-switch>
+                                                          type="is-info">@{{ accountState }}</b-switch>
                                             </div>
                                         </div>
                                         <div class="column">
-                                            <button type="submit" class="button is-primary is-pulled-right">Créer le compte</button>
+                                            <button type="submit" class="button is-primary is-pulled-right">Créer le
+                                                compte
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
