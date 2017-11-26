@@ -18,6 +18,21 @@ class Producteur extends Model
 
     public $timestamps = false;
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function (Producteur $subject) {
+            $media = $subject->media();
+            if ($media->exists()) {
+                $media->delete();
+            }
+        });
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function media()
     {
         return $this->hasOne(Media::class, 'id_producteur', 'id_producteur');
