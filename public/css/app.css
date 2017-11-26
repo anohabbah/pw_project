@@ -14210,6 +14210,11 @@ label.panel-block:hover {
   height: 100px;
 }
 
+.profile-pic.is-centered {
+  display: block;
+  margin: 0 auto;
+}
+
 .menu-label {
   margin-left: 0.75em;
 }

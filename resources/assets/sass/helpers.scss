@@ -26,4 +26,9 @@ $sides: (top, bottom, left, right); // Leave this variable alone
   display: block;
   width: 100px;
   height: 100px;
+
+  &.is-centered {
+    display: block;
+    margin: 0 auto;
+  }
 }

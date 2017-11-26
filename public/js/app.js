@@ -40567,23 +40567,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     props: {
         adresseVisible: {
             type: String,
-            default: 'Compte Non Activé'
+            default: 'Non Visible'
         },
         actif: {
             type: String,
             default: 'Compte Non Activé'
         },
         lati: {
-            type: String,
-            default: ''
+            type: Number,
+            default: null
         },
         lng: {
-            type: String,
-            default: ''
+            type: Number,
+            default: null
         },
         profileAvatar: {
-            type: String,
-            default: ''
+            type: Number,
+            default: null
         }
     },
     data: function data() {
@@ -40591,8 +40591,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             lat: this.lati,
             long: this.lng,
             id_media: this.profileAvatar,
-            accountState: this.actif,
-            addressState: this.adresseVisible,
+            accountState: this.actif === 'on' ? 'Compte Activé' : 'Compte Non Activé',
+            addressState: this.adresseVisible === 'on' ? 'Visible' : 'Non Visible',
             show: false,
             imgDataUrl: '',
             headers: {

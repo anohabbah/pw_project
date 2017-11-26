@@ -86,7 +86,7 @@ class ProducteurController extends Controller
      */
     public function show(Producteur $producteur)
     {
-        return view()->with('producteur', $producteur);
+        return view('producteurs.show')->with('producteur', $producteur);
     }
 
     /**
@@ -141,6 +141,7 @@ class ProducteurController extends Controller
         if ($request->filled('avatar')) {
             $media = Media::find($request->input('avatar'));
             $media->producteur()->associate($producteur);
+            $media->save();
         }
     }
 }

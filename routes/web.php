@@ -17,5 +17,5 @@ Auth::routes();
 
 Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
 Route::resource('categories', 'CategoryController');
-Route::resource('producers', 'ProducteurController');
+Route::resource('producteurs', 'ProducteurController');
 Route::post('/upload/profile/pic', 'MediaController@store')->name('media.store');

@@ -3,11 +3,11 @@
 @section('content')
     <prod-create-view
             inline-template v-cloak
-            {{ old('avatar') ? ':profile-avatar="' . old('avatar') . '"' : '' }}
-            {{ old('lng') ? ':lng="' . old('lng') . '"' : '' }}
-            {{ old('latitude') ? ':lati="' . old('latitude') . '"' : '' }}
-            {{ old('longitude') ? ':lati="' . old('longitude') . '"' : '' }}
-            {{ old('adresse_visible') ? ':adresse-visible="' . old('adresse_visible') . '"' : '' }}
+            {!! old('avatar') ? ':profile-avatar="' . old('avatar') . '"' : '' !!}
+            {!! old('longitude') ? ':lng="' . old('longitude') . '"' : ''  !!}
+            {!! old('latitude') ? ':lati="' . old('latitude') . '"' : '' !!}
+            {{ old('adresse_visible') ?
+                ':adresse-visible="' . old('adresse_visible') . '"' : '' }}
             {{ old('actif') ? ':actif="' . old('actif') . '"' : '' }}>
         <div class="colums producers-page">
             <div class="column">
@@ -19,7 +19,7 @@
                     </div>
                     <div class="card-content">
                         <div class="content">
-                            <form action="{{ route('producers.store') }}" method="post" id="prod_form"
+                            <form action="{{ route('producteurs.store') }}" method="post" id="prod_form"
                                   enctype="multipart/form-data">
                                 {{ csrf_field() }}
 
@@ -30,8 +30,10 @@
                                 <div class="columns">
                                     <div class="column is-half-desktop">
                                         <b-field
-                                                {{ $errors->has('avatar') ?
-                                                'type="is-danger" message="' . $errors->first('avatar') . '"' : ''}}>
+                                                {!! old('avatar') ?
+                                                    'type="is-success" message="Une image de profil est déjà associé à ce compte"' : '' !!}
+                                                {!! $errors->has('avatar') ?
+                                                'type="is-danger" message="' . $errors->first('avatar') . '"' : '' !!}>
                                             <b-tooltip label="Ajouter un photo" position="is-right">
                                                 <a class="button is-primary is-large is-circle" @click="toggleShow">
                                                     <b-icon icon="add_a_photo" type="is-medium"></b-icon>
@@ -119,7 +121,7 @@
                                                 label="Parlez-nous du producteur"
                                                 {!! $errors->has('bio') ?
                                                 'type="is-danger" message="' . $errors->first('bio') . '"' : '' !!}>
-                                            <b-input type="textarea" required maxLength="300"
+                                            <b-input type="textarea"
                                                      placeholder="Parlez-nous de lui..."
                                                      value="{{ old('bio') }}"
                                                      name="bio"></b-input>
@@ -137,7 +139,8 @@
                                                           name="actif"
                                                           true-value="Compte Activé"
                                                           false-value="Compte Non Activé"
-                                                          type="is-info">@{{ accountState }}</b-switch>
+                                                          type="is-info">@{{ accountState }}
+                                                </b-switch>
                                             </div>
                                         </div>
                                         <div class="column">
@@ -155,3 +158,23 @@
         </div>
     </prod-create-view>
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('js/tinymce/js/tinymce/tinymce.min.js') }}"></script>
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            height: 150,
+            menubar: false,
+            plugins: [
+                'advlist autolink lists link image charmap print preview anchor textcolor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table contextmenu paste code help'
+            ],
+            toolbar: 'insert | undo redo |  formatselect | bold italic backcolor  | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+            content_css: [
+                '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+                '//www.tinymce.com/css/codepen.min.css']
+        });
+    </script>
+@endpush
