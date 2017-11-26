@@ -136,9 +136,16 @@ class ProducteurController extends Controller
      * @param Request $request
      * @param $producteur
      */
-    protected function setAvatar(Request $request, $producteur)
+    protected function setAvatar(Request $request, Producteur $producteur)
     {
         if ($request->filled('avatar')) {
+            // Effacer toutes images de profil déjà associées au compte d'un
+            // producteur avant de lui associer une nouvelle image de profil
+            $media = $producteur->media();
+            if ($media->exists()) {
+                $media->delete();
+            }
+
             $media = Media::find($request->input('avatar'));
             $media->producteur()->associate($producteur);
             $media->save();

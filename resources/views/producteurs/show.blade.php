@@ -14,7 +14,7 @@
                         <div class="card-content">
                             <div class="content">
                                 <div class="avatar-container" style="display: block; width: 200px; margin: 0 auto;">
-                                    <img src="{{ asset('storage/' . $producteur->media->url) }}"
+                                    <img src="{{ $producteur->media->url }}"
                                          alt="{{ $producteur->nom }}" class="profile-pic is-centered img-circle">
                                 </div>
                             </div>

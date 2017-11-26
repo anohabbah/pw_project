@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class Media extends Model
 {
@@ -12,6 +13,15 @@ class Media extends Model
     protected $table = 'medias';
 
     public $timestamps = false;
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function (Media $subject) {
+            $subject->deleteFile();
+        });
+    }
 
     /**
      * Media may belong to a producteur.
@@ -28,8 +38,17 @@ class Media extends Model
      */
     public function uploadFile(UploadedFile $file)
     {
-        $this->url = $file->storePublicly('producteurs', ['disk' => 'public']);
+        $path = $file->storePublicly('producteurs', ['disk' => 'public']);
+        $this->url = Storage::url($path);
         $this->save();
+
+        return $this;
+    }
+
+    public function deleteFile()
+    {
+        $filename = basename($this->url);
+        Storage::disk('public')->delete('producteurs/' . $filename);
 
         return $this;
     }
