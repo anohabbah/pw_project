@@ -14,11 +14,9 @@ class CreateCategoriesTable extends Migration
     public function up()
     {
         Schema::create('categories', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('category_id')->nullable();
-            $table->string('name', 50);
-            $table->string('slug')->unique();
-            $table->timestamps();
+            $table->increments('id_categorie');
+            $table->unsignedInteger('f_id_categorie')->nullable();
+            $table->string('nom_categorie', 50);
         });
     }
 

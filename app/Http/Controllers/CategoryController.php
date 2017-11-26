@@ -44,21 +44,19 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'category_id' => 'nullable|exists:categories,id',
-            'name' => 'required|string',
+            'f_id_categorie' => 'nullable|exists:categories,id_categorie',
+            'nom_categorie' => 'required|string',
         ]);
 
-        if ($request->has('category_id')) {
+        if ($request->has('f_id_categorie')) {
             /** @var Category $parent */
-            $parent = Category::findOrfail($request->input('category_id'));
+            $parent = Category::findOrfail($request->input('f_id_categorie'));
             $parent->addChildCategory([
-                'name' => ucwords($request->input('name')),
-                'slug' => str_slug($request->input('name')),
+                'nom_categorie' => ucwords($request->input('nom_categorie'))
             ]);
         } else {
             $cat = new Category();
-            $cat->name = ucwords($request->input('name'));
-            $cat->slug = str_slug($request->input('name'));
+            $cat->nom_categorie = ucwords($request->input('nom_categorie'));
             $cat->save();
         }
 
@@ -100,7 +98,8 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         $data = $request->validate([
-            'name' => 'required'
+            'f_id_categorie' => 'nullable|exists:categories,id_categorie',
+            'nom_categorie' => 'required'
         ]);
 
         $category->update($data);

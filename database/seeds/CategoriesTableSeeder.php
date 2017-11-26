@@ -15,7 +15,7 @@ class CategoriesTableSeeder extends Seeder
         factory(Category::class, 10)
             ->create()
             ->each(function ($cat) {
-                factory(Category::class, 5)->create(['category_id' => $cat->id]);
+                factory(Category::class, 5)->create(['f_id_categorie' => $cat->id_categorie]);
             });
     }
 }

@@ -8,7 +8,11 @@ class Category extends Model
 {
     use Categorizable;
 
+    protected $primaryKey = 'id_categorie';
+
     protected $guarded = [];
+
+    public $timestamps = false;
 
     /**
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
@@ -16,14 +20,14 @@ class Category extends Model
     public static function list()
     {
         return static::with('children')
-            ->whereNull('category_id')
-            ->orderBy('name')
+            ->whereNull('f_id_categorie')
+            ->orderBy('nom_categorie')
             ->simplePaginate(2);
     }
 
     public static function parents()
     {
-        return static::whereNull('category_id')->orderBy('name')->get();
+        return static::whereNull('f_id_categorie')->orderBy('nom_categorie')->get();
     }
 
     protected static function boot()
@@ -32,16 +36,16 @@ class Category extends Model
 
         static::deleted(function ($item) {
             $item->children->each->delete();
-            $item->products->each->delete();
+            $item->produits->each->delete();
         });
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function products()
+    public function produits()
     {
-        return $this->hasMany(Product::class);
+        return $this->hasMany(Produit::class, 'id_categorie', 'id_categorie');
     }
 
 
@@ -50,7 +54,7 @@ class Category extends Model
      */
     public function children()
     {
-        return $this->hasMany(Category::class, 'category_id');
+        return $this->hasMany(Category::class, 'f_id_categorie', 'id_categorie');
     }
 
     /**

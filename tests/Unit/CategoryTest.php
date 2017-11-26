@@ -22,7 +22,7 @@ class CategoryTest extends TestCase
     /** @test */
     public function a_category_may_belong_to_a_parent_category()
     {
-        $child = factory(Category::class)->create(['category_id' => $this->cat->id]);
+        $child = factory(Category::class)->create(['f_id_categorie' => $this->cat->id_categorie]);
 
         $this->assertInstanceOf(Category::class, $child->category);
         $this->assertEquals(2, Category::count());
@@ -31,7 +31,7 @@ class CategoryTest extends TestCase
     /** @test */
     public function a_category_may_have_many_subcategories()
     {
-        $child = factory(Category::class)->create(['category_id' => $this->cat->id]);
+        $child = factory(Category::class)->create(['f_id_categorie' => $this->cat->id_categorie]);
 
         $this->assertInstanceOf(Collection::class, $this->cat->children);
         $this->assertCount(1, $this->cat->children);
@@ -41,15 +41,14 @@ class CategoryTest extends TestCase
     /** @test */
     public function a_category_has_products()
     {
-        $this->assertInstanceOf(Collection::class, $this->cat->products);
+        $this->assertInstanceOf(Collection::class, $this->cat->produits);
     }
 
     /** @test */
     public function a_category_can_add_sub_category()
     {
         $this->cat->addChildCategory([
-            'name' => 'Foobar',
-            'slug' => 'foobar'
+            'nom_categorie' => 'Foobar'
         ]);
 
         $this->assertCount(1, $this->cat->children);
@@ -60,11 +59,11 @@ class CategoryTest extends TestCase
     {
         $this->signIn();
 
-        factory(Category::class, 20)->create(['category_id' => $this->cat->id]);
+        factory(Category::class, 20)->create(['f_id_categorie' => $this->cat->id_categorie]);
 
         $response = $this->getJson('/api/categories')->json();
 
-        $this->assertCount(1, $response);
-        $this->assertCount(20, $response[0]['children']);
+        $this->assertCount(1, $response['data']);
+        $this->assertCount(20, $response['data'][0]['children']);
     }
 }

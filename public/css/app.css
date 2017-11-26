@@ -14193,6 +14193,28 @@ label.panel-block:hover {
   padding-right: 100px !important;
 }
 
+.is-circle {
+  border-radius: 100% !important;
+}
+
+.img-circle {
+  border: 1px solid #dedede;
+  background-color: #fff;
+  padding: 3px;
+  border-radius: 100% !important;
+}
+
+.profile-pic {
+  display: block;
+  width: 100px;
+  height: 100px;
+}
+
+.profile-pic.is-centered {
+  display: block;
+  margin: 0 auto;
+}
+
 .menu-label {
   margin-left: 0.75em;
 }
@@ -14250,5 +14272,21 @@ label.panel-block:hover {
 
 .page-header.hero .hero-body {
   padding: 26px 0 0 230px;
+}
+
+.producers-page {
+  margin-bottom: 100px;
+}
+
+.producer-footer {
+  -webkit-box-shadow: 0 0 10px #363a41;
+          box-shadow: 0 0 10px #363a41;
+  position: fixed;
+  padding: .9375rem;
+  background: #fff;
+  bottom: 0;
+  left: 13.125rem;
+  right: 0;
+  z-index: 5;
 }
 

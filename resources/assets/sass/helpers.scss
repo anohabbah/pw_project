@@ -12,3 +12,23 @@ $sides: (top, bottom, left, right); // Leave this variable alone
     }
   }
 }
+
+.is-circle {
+  border-radius: 100% !important;
+}
+.img-circle {
+  border: 1px solid #dedede;
+  background-color: #fff;
+  padding: 3px;
+  border-radius: 100% !important;
+}
+.profile-pic {
+  display: block;
+  width: 100px;
+  height: 100px;
+
+  &.is-centered {
+    display: block;
+    margin: 0 auto;
+  }
+}

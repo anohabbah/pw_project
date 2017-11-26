@@ -1,7 +1,8 @@
 @extends('layouts.app', ['title' => 'Catégories', 'subtitle' => 'Ajouter une nouvelle catégorie'])
 
 @section('content')
-    <cat-create-view {{ old('category_id') ? ':current="' . old('category_id') .'"' : '' }} :data="{{ $categories }}" inline-template v-cloak>
+    <cat-create-view {{ old('f_id_categorie') ? ':current="' . old('f_id_categorie') . '"' : '' }}
+                     :data="{{ $categories }}" inline-template v-cloak>
         <div class="columns">
             <div class="column is-half-desktop">
                 <div class="card">
@@ -15,23 +16,23 @@
                             <form id="categ_form" action="{{ route('categories.store') }}" method="post">
                                 {{ csrf_field() }}
                                 <b-field label="Intitulé de la catégorie"
-                                        {{ $errors->has('name') ? 'type="is-danger" message="' . $errors->first('name') . '"' : ''}}>
-                                    <b-input maxlength="50" name="name" required
-                                             value="{{ old('name') }}"
+                                        {{ $errors->has('nom_categorie') ? 'type="is-danger" message="' . $errors->first('nom_categorie') . '"' : ''}}>
+                                    <b-input maxlength="100" name="nom_categorie" required
+                                             value="{{ old('nom_categorie') }}"
                                              placeholder="Indiquer ici l'intitulé de la nouvelle catégorie"></b-input>
                                 </b-field>
 
                                 <b-field
-                                        {{ $errors->has('category_id') ? 'type="is-danger" message="' . $errors->first('category_id') . '"' : ''}}
+                                        {{ $errors->has('f_id_categorie') ? 'type="is-danger" message="' . $errors->first('f_id_categorie') . '"' : ''}}
                                         label="Catégories"
                                         message="Ne selectionner que si vous voulez defenir la nouvelle catégorie comme une sous catégorie d'une autre">
                                     <b-select placeholder="Sélectionner une catégorie (optionnel)"
-                                              v-model="categoryId" name="category_id">
+                                              v-model="categorySelected" name="f_id_categorie">
                                         <option
                                                 v-for="category in categories"
-                                                :value="category.id"
-                                                :key="category.id"
-                                                v-text="category.name"
+                                                :value="category.id_categorie"
+                                                :key="category.id_categorie"
+                                                v-text="category.nom_categorie"
                                         ></option>
                                     </b-select>
                                 </b-field>

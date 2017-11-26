@@ -4,7 +4,7 @@
         data() {
             return {
                 categories: this.data,
-                categoryId: this.current
+                categorySelected: this.current
             }
         }
     }
