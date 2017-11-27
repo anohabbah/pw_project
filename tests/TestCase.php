@@ -5,7 +5,9 @@ namespace Tests;
 use App\User;
 use App\Exceptions\Handler;
 use Illuminate\Contracts\Debug\ExceptionHandler;
+use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Support\Facades\Event;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -44,5 +46,17 @@ abstract class TestCase extends BaseTestCase
     {
         $this->app->instance(ExceptionHandler::class, $this->oldExceptionHandler);
         return $this;
+    }
+
+    /**
+     * Permet d'afficher une requête données executée sur la BD.
+     */
+    public function listenQueries()
+    {
+        Event::listen(QueryExecuted::class, function ($query) {
+            echo "\033[0;34m" . $query->sql . "\033[0m <= ";
+            echo "\033[0;32m[" . implode(', ', $query->bindings) . "]\033[0m";
+            echo "\n";
+        });
     }
 }

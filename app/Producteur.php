@@ -11,6 +11,8 @@ class Producteur extends Model
         'telephone', 'longitude', 'latitude', 'bio', 'actif'
     ];
 
+    protected $hidden = ['mot_de_passe'];
+
     /**
      * @inherited
      */

@@ -39,7 +39,7 @@ class Media extends Model
     public function uploadFile(UploadedFile $file)
     {
         $path = $file->storePublicly('producteurs', ['disk' => 'public']);
-        $this->url = Storage::url($path);
+        $this->url = asset('storage/' . $path);
         $this->save();
 
         return $this;
