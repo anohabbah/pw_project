@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Media;
 use App\Producteur;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class ProducteurController extends Controller
 {
@@ -41,17 +44,7 @@ class ProducteurController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'nom' => 'required|string|max:100',
-            'email' => 'required|string|email|max:255|unique:producteurs',
-            'mot_de_passe' => 'required|string|min:6|confirmed',
-            'adresse' => 'required|string|max:100',
-            'telephone' => 'required|string|max:25|unique:producteurs',
-            'bio' => 'required',
-            'avatar' => 'nullable|exists:medias,id_media'
-        ], [
-            'avatar.exists' => 'La photo de profil doit être préalablement téléversée.'
-        ]);
+        $this->validator($request->all())->validate();
 
         $producteur = $this->createProducer($request->all());
 
@@ -61,7 +54,7 @@ class ProducteurController extends Controller
 
         $this->setAvatar($request, $producteur);
 
-        return redirect()->route('producers.show', $producteur);
+        return redirect()->route('producteurs.show', $producteur);
     }
 
     protected function createProducer(array $data)
@@ -109,7 +102,25 @@ class ProducteurController extends Controller
      */
     public function update(Request $request, Producteur $producteur)
     {
-        //
+        $this->validator($request->all(), [
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('producteurs')->ignore($producteur->id_producteur, 'id_producteur')
+            ],
+            'telephone' => [
+                'required',
+                'string',
+                'max:25',
+                Rule::unique('producteurs')->ignore($producteur->id_producteur, 'id_producteur')
+            ],
+            'mot_de_passe' => 'sometimes|string|required|min:6|confirmed'
+        ])->validate();
+
+        $producteur->update($request->all());
+
+        return redirect()->route('producteurs.show', $producteur);
     }
 
     /**
@@ -120,7 +131,10 @@ class ProducteurController extends Controller
      */
     public function destroy(Producteur $producteur)
     {
-        //
+        $producteur->delete();
+
+        Session::flash('flash', 'Compte supprimé avec succès !');
+        return redirect()->route('producteurs.index');
     }
 
     /**
@@ -150,5 +164,25 @@ class ProducteurController extends Controller
             $media->producteur()->associate($producteur);
             $media->save();
         }
+    }
+
+    public function validator(array $data, array $rules = [])
+    {
+        $defaultRules = [
+            'nom' => 'required|string|max:100',
+            'email' => 'required|email|max:255|unique:producteurs',
+            'mot_de_passe' => 'required|string|min:6|confirmed',
+            'adresse' => 'required|string|max:100',
+            'telephone' => 'required|string|max:25|unique:producteurs',
+            'bio' => 'required',
+            'avatar' => 'nullable|exists:medias,id_media'
+        ];
+
+        $customMessages = [
+            'avatar.exists' => 'La photo de profil doit être préalablement téléversée.'
+        ];
+
+        $rules = array_merge($defaultRules, $rules);
+        return Validator::make($data, $rules, $customMessages);
     }
 }

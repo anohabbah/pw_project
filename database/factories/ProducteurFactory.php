@@ -10,9 +10,9 @@ $factory->define(App\Producteur::class, function (Faker $faker) {
         'telephone' => $faker->phoneNumber,
         'email' => $faker->freeEmail,
         'mot_de_passe' => bcrypt('secret'),
-        'state' => $faker->randomElement([true, false]),
-        'long' => $faker->longitude,
-        'lat' => $faker->latitude,
+        'actif' => $faker->randomElement([true, false]),
+        'longitude' => $faker->longitude,
+        'latitude' => $faker->latitude,
         'bio' => $faker->paragraphs(5, true),
     ];
 });
