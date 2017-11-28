@@ -14,6 +14,8 @@ class Media extends Model
 
     public $timestamps = false;
 
+    protected $guarded = [];
+
     protected static function boot()
     {
         parent::boot();

@@ -141,9 +141,9 @@ class ProducteurController extends Controller
      * @param Request $request
      * @param $producteur
      */
-    protected function updateProducerAccount(Request $request, $producteur)
+    protected function updateProducerAccount(Request $request, Producteur $producteur)
     {
-        $producteur->updateStates($request->filled('actif'), $request->filled('adresse_visible'));
+        $producteur->updateStates($request->filled('adresse_visible'), $request->filled('actif'));
     }
 
     /**

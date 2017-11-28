@@ -19,3 +19,4 @@ Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
 Route::resource('categories', 'CategoryController');
 Route::resource('producteurs', 'ProducteurController');
 Route::post('/upload/profile/pic', 'MediaController@store')->name('media.store');
+Route::post('/profile/{producteur}/avatar', 'MediaController@update')->name('media.update');
