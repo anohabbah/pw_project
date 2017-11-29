@@ -50755,6 +50755,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         if (this.message) {
             this.flash(this.message);
         }
+
         window.events.$on('flash', function (message) {
             _this.flash(message);
         });
@@ -52760,11 +52761,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['avatar'],
+    props: ['avatar', 'subject'],
     data: function data() {
         return {
+            producer: this.subject,
             show: false,
             imgDataUrl: this.avatar,
+            nom: this.subject.nom,
+            email: this.subject.email,
+            phone: this.subject.telephone,
+            desc: this.subject.bio,
+            loading: false,
+            isEditName: false,
+            isEditingDesc: false,
             headers: {
                 'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
             }
@@ -52784,6 +52793,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         cropUploadFail: function cropUploadFail(status, field) {
             console.log(status);
+        },
+        performUpdateName: function performUpdateName() {
+            var _this = this;
+
+            this.loading = true;
+            this.producer.nom = this.nom;
+            this.producer.telephone = this.phone;
+
+            axios.put(App.routeUpdate, this.producer).then(function (_ref) {
+                var data = _ref.data;
+
+                _this.loading = false;
+                _this.isEditName = false;
+            }).catch(function (err) {
+                console.log(err);
+            });
         }
     }
 });

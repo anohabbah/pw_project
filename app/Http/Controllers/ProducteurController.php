@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ProducteurController extends Controller
 {
@@ -115,10 +116,14 @@ class ProducteurController extends Controller
                 'max:25',
                 Rule::unique('producteurs')->ignore($producteur->id_producteur, 'id_producteur')
             ],
-            'mot_de_passe' => 'sometimes|string|required|min:6|confirmed'
+            'mot_de_passe' => 'sometimes|required|string|min:6|confirmed'
         ])->validate();
 
         $producteur->update($request->all());
+
+        if ($request->wantsJson()) {
+            return new JsonResponse($producteur->fresh());
+        }
 
         return redirect()->route('producteurs.show', $producteur);
     }

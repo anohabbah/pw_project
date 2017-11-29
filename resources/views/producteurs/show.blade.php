@@ -2,6 +2,7 @@
 
 @section('content')
     <prod-show-view
+            :subject="{{ $producteur }}"
             {{ $producteur->media
                 ? ':avatar="' . $producteur->media->url .'"'
                 : ':avatar="https://www.gravatar.com/avatar/' . md5($producteur->email) . '?s=100"' }}
@@ -15,17 +16,17 @@
                                 <div class="card-header-title">
                                     Photo de Profil
                                 </div>
-                                <a href="#" class="card-header-icon" aria-label="more options">
-                                    <b-tooltip label="Modifier Profil" position="is-bottom" multilined>
+                                <a @click="isEditName = !isEditName" class="card-header-icon" aria-label="more options">
+                                    <b-tooltip label="Modifier Profil" position="is-left">
                                         <b-icon icon="edit"></b-icon>
                                     </b-tooltip>
                                 </a>
                             </div>
                             <div class="card-content">
-                                <div class="content">
+                                <div>
                                     <div class="avatar-container">
                                         <img :src="imgDataUrl"
-                                             alt="{{ $producteur->nom }}"
+                                             :alt="nom"
                                              class="profile-pic is-centered img-circle">
 
                                         <div class="add-profile-pic">
@@ -51,13 +52,61 @@
 
                                     <section class="hero has-text-centered">
                                         <div class="hero-body p-t-5 p-b-5">
-                                            <div class="container">
-                                                <h1 class="title">{{ $producteur->nom }}</h1>
-                                                <h2 class="subtitle">{{ $producteur->email }}</h2>
+                                            <div class="container" v-if="!isEditName">
+                                                <h1 class="title" v-text="nom"></h1>
+                                                <h2 class="subtitle m-b-5" v-text="email"></h2>
+                                                <h2 class="subtitle m-t-0" v-text="phone"></h2>
+                                            </div>
+                                            <div class="container" v-else>
+                                                <b-field>
+                                                    <b-input v-model="nom" :loading="loading"></b-input>
+                                                </b-field>
+                                                <b-field>
+                                                    <b-input v-model="email" disabled></b-input>
+                                                </b-field>
+                                                <b-field>
+                                                    <b-input v-model="phone" :loading="loading"></b-input>
+                                                </b-field>
                                             </div>
                                         </div>
                                     </section>
                                 </div>
+                            </div>
+                            <div class="card-footer" v-if="isEditName">
+                                <a @click="isEditName = false" class="card-footer-item">Annuler</a>
+                                <a class="card-footer-item" @click="performUpdateName">Enregistrer</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="columns">
+                    <div class="column is-half-desktop is-one-quarter-desktop">
+                        <div class="card">
+                            <header class="card-header">
+                                <div class="card-header-title">Description du profil</div>
+
+                                <a @click="isEditingDesc = !isEditingDesc" class="card-header-icon" aria-label="more options">
+                                    <b-tooltip label="Modifier la description" position="is-left">
+                                        <b-icon icon="edit"></b-icon>
+                                    </b-tooltip>
+                                </a>
+                            </header>
+                            <div class="card-content">
+                                <div class="content">
+                                    <div class="desc-body" v-html="desc" v-if="!isEditingDesc"></div>
+
+                                    <div class="desc-form" v-else>
+                                        <b-field>
+                                            <b-input type="textarea" v-model="desc"></b-input>
+                                        </b-field>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div v-if="isEditingDesc" class="card-footer">
+                                <a @click="isEditingDesc = false" class="card-footer-item">Annuler</a>
+                                <a class="card-footer-item">Enregistrer</a>
                             </div>
                         </div>
                     </div>
@@ -78,3 +127,11 @@
         </div>
     </prod-show-view>
 @endsection
+
+@push('styles')
+    <script>
+        App = {!! json_encode([
+            'routeUpdate' => route('producteurs.update', $producteur)
+        ]) !!}
+    </script>
+@endpush
