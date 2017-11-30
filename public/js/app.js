@@ -4299,12 +4299,10 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_buefy___default.a);
 
 
 Vue.use(__WEBPACK_IMPORTED_MODULE_1_vue2_google_maps__, {
+    installComponents: true,
     load: {
         key: 'AIzaSyAiTDLF-TUKkzbnLoXSUpUh75TmvcuIkoE',
-        libraries: 'places' // This is required if you use the Autocomplete plugin
-        // OR: libraries: 'places,drawing'
-        // OR: libraries: 'places,drawing,visualization'
-        // (as you require)
+        libraries: 'places'
     }
 });
 
@@ -52762,7 +52760,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             email: this.subject.email,
             phone: this.subject.telephone,
             desc: this.subject.bio,
-            loading: false,
+            adresse: this.subject.adresse,
+            marker: {
+                lat: parseFloat(this.subject.latitude),
+                lng: parseFloat(this.subject.longitude)
+            },
+            isLoading: false,
             isEditName: false,
             isEditingDesc: false,
             headers: {
@@ -52788,15 +52791,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         performUpdateName: function performUpdateName() {
             var _this = this;
 
-            this.loading = true;
+            this.isLoading = true;
             this.producer.nom = this.nom;
             this.producer.telephone = this.phone;
 
             axios.put(App.producerUpdate, this.producer).then(function (_ref) {
                 var data = _ref.data;
 
-                _this.loading = false;
+                _this.isLoading = false;
                 _this.isEditName = false;
+                _this.toast();
             }).catch(function (err) {
                 console.log(err);
             });
@@ -52804,16 +52808,54 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         performUpdateBio: function performUpdateBio() {
             var _this2 = this;
 
+            this.isLoading = true;
             this.producer.bio = tinyMCE.activeEditor.getContent();
 
             axios.put(App.producerUpdate, this.producer).then(function (_ref2) {
                 var data = _ref2.data;
 
                 _this2.desc = _this2.producer.bio;
+                _this2.isLoading = false;
                 _this2.isEditingDesc = false;
+                _this2.toast();
             }).catch(function (err) {
                 console.log(err);
             });
+        },
+        performUpdateAdresse: function performUpdateAdresse() {
+            var _this3 = this;
+
+            this.producer.adresse = this.adresse;
+            this.producer.latitude = this.marker.lat;
+            this.producer.longitude = this.marker.lng;
+
+            this.isLoading = true;
+            axios.put(App.producerUpdate, this.producer).then(function (_ref3) {
+                var data = _ref3.data;
+
+                _this3.isLoading = false;
+                _this3.toast();
+            });
+        },
+        setPlace: function setPlace(place) {
+            var _this4 = this;
+
+            this.marker.lat = place.geometry.location.lat();
+            this.marker.lng = place.geometry.location.lng();
+
+            this.$snackbar.open({
+                message: "Voulez-vous enregistrer cette nouvelle adresse ?",
+                type: 'is-info',
+                position: 'is-bottom',
+                actionText: 'OK',
+                duration: 10000,
+                onAction: function onAction() {
+                    _this4.performUpdateAdresse();
+                }
+            });
+        },
+        toast: function toast() {
+            this.$toast.open({ message: 'Mise à jour réussie !', type: 'is-success' });
         }
     }
 });

@@ -7,7 +7,7 @@
                 ? ':avatar="' . $producteur->media->url .'"'
                 : ':avatar="https://www.gravatar.com/avatar/' . md5($producteur->email) . '?s=100"' }}
             inline-template v-cloak>
-        <div class="colums">
+        <div class="colums m-b-70">
             <div class="column">
                 <div class="columns">
                     <div class="column is-half-desktop is-offset-one-quarter-desktop">
@@ -59,13 +59,13 @@
                                             </div>
                                             <div v-else>
                                                 <b-field>
-                                                    <b-input v-model="nom" :loading="loading"></b-input>
+                                                    <b-input v-model="nom"></b-input>
                                                 </b-field>
                                                 <b-field>
                                                     <b-input v-model="email" disabled></b-input>
                                                 </b-field>
                                                 <b-field>
-                                                    <b-input v-model="phone" :loading="loading"></b-input>
+                                                    <b-input v-model="phone"></b-input>
                                                 </b-field>
                                             </div>
                                         </div>
@@ -119,17 +119,33 @@
                     </div>
                 </div>
 
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-header-title">
-                            Producteurs
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <div class="content">
+                <div class="columns">
+                    <div class="column is-half-desktop is-offset-one-quarter-desktop">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-header-title">
+                                    Coordonnées géographique
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="content">
+                                    <b-field>
+                                        <gmap-autocomplete
+                                                v-model="adresse" class="input"
+                                                @place_changed="setPlace"></gmap-autocomplete>
+                                    </b-field>
+                                </div>
+                                <div class="content">
+                                    <gmap-map style="width: 100%; height: 150px" :zoom="15" :center="marker">
+                                        <gmap-marker :clickable="false" :position="marker"></gmap-marker>
+                                    </gmap-map>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <b-loading :active.sync="isLoading" :can-cancel="false"></b-loading>
             </div>
         </div>
     </prod-show-view>
