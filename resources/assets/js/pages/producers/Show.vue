@@ -39,13 +39,26 @@
                 this.producer.nom = this.nom;
                 this.producer.telephone = this.phone;
 
-                axios.put(App.routeUpdate, this.producer)
+                axios.put(App.producerUpdate, this.producer)
                     .then(({data}) => {
                         this.loading = false;
                         this.isEditName = false;
-                    }).catch(err => {
-                    console.log(err);
-                })
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            },
+            performUpdateBio() {
+                this.producer.bio = tinyMCE.activeEditor.getContent();
+
+                axios.put(App.producerUpdate, this.producer)
+                    .then(({data}) => {
+                        this.desc = this.producer.bio;
+                        this.isEditingDesc = false;
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
             }
         }
     }

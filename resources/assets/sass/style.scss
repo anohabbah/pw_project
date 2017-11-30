@@ -66,3 +66,15 @@
     left: 60%;
   }
 }
+
+.bio-content {
+  border: solid 1px #c7d6db;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgb(108, 134, 142);
+  font-style: italic;
+  white-space: normal;
+  font-size: 12px;
+}

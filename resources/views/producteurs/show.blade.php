@@ -52,12 +52,12 @@
 
                                     <section class="hero has-text-centered">
                                         <div class="hero-body p-t-5 p-b-5">
-                                            <div class="container" v-if="!isEditName">
+                                            <div v-if="!isEditName">
                                                 <h1 class="title" v-text="nom"></h1>
                                                 <h2 class="subtitle m-b-5" v-text="email"></h2>
                                                 <h2 class="subtitle m-t-0" v-text="phone"></h2>
                                             </div>
-                                            <div class="container" v-else>
+                                            <div v-else>
                                                 <b-field>
                                                     <b-input v-model="nom" :loading="loading"></b-input>
                                                 </b-field>
@@ -81,7 +81,7 @@
                 </div>
 
                 <div class="columns">
-                    <div class="column is-half-desktop is-one-quarter-desktop">
+                    <div class="column is-half-desktop is-offset-one-quarter-desktop">
                         <div class="card">
                             <header class="card-header">
                                 <div class="card-header-title">Description du profil</div>
@@ -96,17 +96,24 @@
                                 <div class="content">
                                     <div class="desc-body" v-html="desc" v-if="!isEditingDesc"></div>
 
-                                    <div class="desc-form" v-else>
-                                        <b-field>
-                                            <b-input type="textarea" v-model="desc"></b-input>
-                                        </b-field>
-                                    </div>
+                                    <form id="ajaxForm">
+                                        <div class="desc-form" v-show="isEditingDesc">
+                                            <b-field>
+                                                <b-input
+                                                        type="textarea"
+                                                        v-model="desc"
+                                                        :value="desc"
+                                                        placeholder="Décrire en quelques mots le producteur."
+                                                        name="bio"></b-input>
+                                            </b-field>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
 
                             <div v-if="isEditingDesc" class="card-footer">
                                 <a @click="isEditingDesc = false" class="card-footer-item">Annuler</a>
-                                <a class="card-footer-item">Enregistrer</a>
+                                <a @click.prevent="performUpdateBio" class="card-footer-item">Enregistrer</a>
                             </div>
                         </div>
                     </div>
@@ -131,7 +138,14 @@
 @push('styles')
     <script>
         App = {!! json_encode([
-            'routeUpdate' => route('producteurs.update', $producteur)
+            'producerUpdate' => route('producteurs.update', $producteur),
+            'baseDir' => public_path()
         ]) !!}
     </script>
+@endpush
+
+@push('scripts')
+    <script src="{{ asset('js/tinymce/tiny_mce.js') }}"></script>
+    <script src="{{ asset('js/tinymce.inc.js') }}"></script>
+    <script src="{{ asset('js/tinymce_loader.js') }}"></script>
 @endpush

@@ -118,13 +118,14 @@
                                 <div class="columns">
                                     <div class="column is-half-desktop">
                                         <b-field
-                                                label="Parlez-nous du producteur"
+                                                label="Biographie du producteur"
                                                 {!! $errors->has('bio') ?
                                                 'type="is-danger" message="' . $errors->first('bio') . '"' : '' !!}>
-                                            <b-input type="textarea"
-                                                     placeholder="Parlez-nous de lui..."
-                                                     value="{{ old('bio') }}"
-                                                     name="bio"></b-input>
+                                            <b-input
+                                                    type="textarea"
+                                                    placeholder="Décrire en quelques mots le producteur."
+                                                    value="{{ old('bio') }}"
+                                                    name="bio"></b-input>
                                         </b-field>
                                     </div>
                                 </div>
@@ -144,8 +145,8 @@
                                             </div>
                                         </div>
                                         <div class="column">
-                                            <button type="submit" class="button is-primary is-pulled-right">Créer le
-                                                compte
+                                            <button type="submit"
+                                                    class="button is-primary is-pulled-right">Créer le compte
                                             </button>
                                         </div>
                                     </div>
@@ -159,22 +160,16 @@
     </prod-create-view>
 @endsection
 
-@push('scripts')
-    <script src="{{ asset('js/tinymce/js/tinymce/tinymce.min.js') }}"></script>
+@push('styles')
     <script>
-        tinymce.init({
-            selector: 'textarea',
-            height: 150,
-            menubar: false,
-            plugins: [
-                'advlist autolink lists link image charmap print preview anchor textcolor',
-                'searchreplace visualblocks code fullscreen',
-                'insertdatetime media table contextmenu paste code help'
-            ],
-            toolbar: 'insert | undo redo |  formatselect | bold italic backcolor  | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
-            content_css: [
-                '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
-                '//www.tinymce.com/css/codepen.min.css']
-        });
+        window.App = {!! json_encode([
+            'baseDir' => public_path()
+        ]) !!}
     </script>
+@endpush
+
+@push('scripts')
+    <script src="{{ asset('js/tinymce/tiny_mce.js') }}"></script>
+    <script src="{{ asset('js/tinymce.inc.js') }}"></script>
+    <script src="{{ asset('js/tinymce_loader.js') }}"></script>
 @endpush
