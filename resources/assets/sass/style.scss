@@ -7,9 +7,11 @@
   left: 0;
   display: block;
 }
+
 .menu {
   margin: 10px 0 0 0;
 }
+
 #content {
   margin-left: 210px;
   padding: 120px 10px 0;
@@ -17,6 +19,7 @@
   transition-duration: .4s;
   transition-timing-function: ease out;
 }
+
 .page-header {
   width: 100%;
   height: 100px;
@@ -48,4 +51,30 @@
   left: 13.125rem;
   right: 0;
   z-index: 5;
+}
+
+.avatar-container {
+  position: relative;
+  display: block;
+  width: 200px;
+  height: 100px;
+  margin: 0 auto;
+
+  .add-profile-pic {
+    position: absolute;
+    bottom: 0;
+    left: 60%;
+  }
+}
+
+.bio-content {
+  border: solid 1px #c7d6db;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgb(108, 134, 142);
+  font-style: italic;
+  white-space: normal;
+  font-size: 12px;
 }

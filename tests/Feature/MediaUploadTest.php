@@ -38,7 +38,7 @@ class MediaUploadTest extends TestCase
     protected function uploadFile(array $data = [])
     {
         $file_path = base_path('tests/fixtures/test.jpg');
-        $file = new UploadedFile($file_path, 'test.png', filesize($file_path), 'image/*', null, true);
+        $file = new UploadedFile($file_path, 'test.jpg', 'image/*', filesize($file_path), null, true);
 
         $params = ['avatar' => $file];
 
@@ -53,7 +53,7 @@ class MediaUploadTest extends TestCase
         $filename = basename($url);
 
         $this->assertDatabaseHas('medias', ['id_media' => $response['id_media'], 'url' => $response['url']]);
-        $this->assertEquals('http://localhost:8000/storage/producteurs/'. $filename, $url);
+        $this->assertEquals('http://localhost:8000/storage/producteurs/' . $filename, $url);
         $this->assertFileExists(base_path('tests/fixtures/storage/producteurs/' . $filename));
     }
 
@@ -88,5 +88,19 @@ class MediaUploadTest extends TestCase
             'id_media' => $media->id_media,
             'id_producteur' => $prod->id_producteur
         ]);
+    }
+
+    /** @test */
+    public function update_producer_profile_picture()
+    {
+        $prod = factory(Producteur::class)->create();
+
+        $file_path = base_path('tests/fixtures/test.jpg');
+        $file = new UploadedFile($file_path, 'test.jpg', 'image/*', filesize($file_path), null, true);
+
+        $params = ['avatar' => $file];
+        $response = $this->post(route('media.update', $prod), $params)->json();
+
+        $this->assertEquals($prod->media->url, $response['url']);
     }
 }
