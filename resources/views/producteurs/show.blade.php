@@ -14,7 +14,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="card-header-title">
-                                    Photo de Profil
+                                    Informations personnelles
                                 </div>
                                 <a @click="isEditName = !isEditName" class="card-header-icon" aria-label="more options">
                                     <b-tooltip label="Modifier Profil" position="is-left">

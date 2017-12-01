@@ -1,14 +1,16 @@
-@extends('layouts.app', ['title' => 'Producteurs', 'subtitle' => 'Ajouter un producteur'])
+@extends('layouts.app', ['title' => 'Producteurs', 'subtitle' => 'Modification de profil'])
 
 @section('content')
-    <prod-create-view
+    <prod-edit-view
             inline-template v-cloak
-            {!! old('avatar') ? ':profile-avatar="' . old('avatar') . '"' : '' !!}
-            {!! old('longitude') ? ':lng="' . old('longitude') . '"' : ''  !!}
-            {!! old('latitude') ? ':lat="' . old('latitude') . '"' : '' !!}
-            {{ old('adresse_visible') ?
-                ':adresse-visible="' . old('adresse_visible') . '"' : '' }}
-            {{ old('actif') ? ':actif="' . old('actif') . '"' : '' }}>
+            {{ $producteur->media
+                ? ':avatar="' . $producteur->media->url .'"'
+                : ':avatar="https://www.gravatar.com/avatar/' . md5($producteur->email) . '?s=100"' }}
+            {!! old('longitude', $producteur->longitude) ? ':lng="' . old('longitude', $producteur->longitude) . '"' : ''  !!}
+            {!! old('latitude', $producteur->latitude) ? ':lat="' . old('latitude', $producteur->latitude) . '"' : '' !!}
+            {{ old('adresse_visible', $producteur->adresse_visible) ?
+                ':adresse-visible="' . old('adresse_visible', $producteur->adresse_visible) . '"' : '' }}
+            {{ old('actif', $producteur->actif) ? ':actif="' . old('actif', $producteur->actif) . '"' : '' }}>
         <div class="colums producers-page">
             <div class="column">
                 <div class="card">
@@ -19,41 +21,41 @@
                     </div>
                     <div class="card-content">
                         <div class="content">
-                            <form action="{{ route('producteurs.store') }}" method="post" id="prod_form"
+                            <form action="{{ route('producteurs.update', $producteur) }}" method="post" id="prod_form"
                                   enctype="multipart/form-data">
                                 {{ csrf_field() }}
+                                {{ method_field('put') }}
 
-                                <input type="hidden" name="avatar" :value="id_media">
                                 <input type="hidden" name="longitude" :value="position.lng">
                                 <input type="hidden" name="latitude" :value="position.lat">
 
                                 <div class="columns">
                                     <div class="column is-half-desktop">
-                                        <b-field
-                                                {!! old('avatar') ?
-                                                    'type="is-success" message="Une image de profil est déjà associé à ce compte"' : '' !!}
-                                                {!! $errors->has('avatar') ?
-                                                'type="is-danger" message="' . $errors->first('avatar') . '"' : '' !!}>
-                                            <b-tooltip label="Ajouter un photo" position="is-right">
-                                                <a class="button is-primary is-large is-circle" @click="toggleShow">
-                                                    <b-icon icon="add_a_photo" type="is-medium"></b-icon>
-                                                </a>
-                                            </b-tooltip>
-                                            <image-upload
-                                                    field="avatar"
-                                                    @crop-success="cropSuccess"
-                                                    @crop-upload-success="cropUploadSuccess"
-                                                    @crop-upload-fail="cropUploadFail"
-                                                    v-model="show"
-                                                    :width="300"
-                                                    :height="300"
-                                                    url="{{ route('media.store') }}"
-                                                    :headers="headers"
-                                                    lang-type="fr"
-                                                    img-format="png"></image-upload>
-                                            <a @click="toggleShow">
-                                                <img class="profile-pic img-circle" :src="imgDataUrl" v-if="imgDataUrl">
-                                            </a>
+                                        <b-field>
+                                            <div class="avatar-container" style="margin: 0 !important;">
+                                                <img :src="imgDataUrl" alt="{{ $producteur->nom }}"
+                                                     class="profile-pic is-centered img-circle">
+
+                                                <div class="add-profile-pic">
+                                                    <b-tooltip label="Modifier la photo de profil" position="is-right">
+                                                        <a class="button is-primary is-circle" @click="toggleShow">
+                                                            <b-icon icon="add_a_photo"></b-icon>
+                                                        </a>
+                                                    </b-tooltip>
+                                                    <image-upload
+                                                            field="avatar"
+                                                            @crop-success="cropSuccess"
+                                                            @crop-upload-success="cropUploadSuccess"
+                                                            @crop-upload-fail="cropUploadFail"
+                                                            v-model="show"
+                                                            :width="300"
+                                                            :height="300"
+                                                            url="{{ route('media.update', $producteur) }}"
+                                                            :headers="headers"
+                                                            lang-type="fr"
+                                                            img-format="png"></image-upload>
+                                                </div>
+                                            </div>
                                         </b-field>
 
                                         <b-field label="Nom du producteur"
@@ -61,26 +63,33 @@
                                                 'type="is-danger" message="' . $errors->first('nom') . '"' : '' !!}>
                                             <b-input name="nom" required
                                                      maxLength="100"
-                                                     value="{{ old('nom') }}"></b-input>
+                                                     value="{{ old('nom', $producteur->nom) }}"></b-input>
                                         </b-field>
 
                                         <b-field label="Adresse électronique"
                                                 {!! $errors->has('email') ?
                                                 'type="is-danger" message="' . $errors->first('email') . '"' : '' !!}>
                                             <b-input name="email" required maxLength="100"
-                                                     value="{{ old('email') }}"></b-input>
+                                                     value="{{ old('email', $producteur->email) }}" disabled></b-input>
                                         </b-field>
-                                        <b-field
-                                                label="Mot de passe"
-                                                {!! $errors->has('mot_de_passe') ?
-                                                'type="is-danger" message="' . $errors->first('mot_de_passe') . '"' : '' !!}>
-                                            <b-input type="password" required minLength="6" :has-counter="false"
-                                                     password-reveal name="mot_de_passe"></b-input>
+
+                                        <b-field label="Mot de passe">
+                                            <a @click="togglePassword"
+                                                    class="button" v-text="passwordButtonText"></a>
                                         </b-field>
-                                        <b-field label="Confirmer le mot de passe">
-                                            <b-input type="password" required password-reveal
-                                                     name="mot_de_passe_confirmation"></b-input>
-                                        </b-field>
+
+                                        <div v-if="modifyPassword">
+                                            <b-field
+                                                    {!! $errors->has('mot_de_passe') ?
+                                                    'type="is-danger" message="' . $errors->first('mot_de_passe') . '"' : '' !!}>
+                                                <b-input type="password" required minLength="6" :has-counter="false"
+                                                         password-reveal name="mot_de_passe"></b-input>
+                                            </b-field>
+                                            <b-field label="Confirmer le mot de passe">
+                                                <b-input type="password" required password-reveal
+                                                         name="mot_de_passe_confirmation"></b-input>
+                                            </b-field>
+                                        </div>
 
                                         <b-field label="Adresse postale du producteur"
                                                 {!! $errors->has('adresse') ?
@@ -89,7 +98,7 @@
                                                 <gmap-autocomplete
                                                         class="input"
                                                         name="adresse"
-                                                        value="{{ old('adresse') }}"
+                                                        value="{{ old('adresse', $producteur->adresse) }}"
                                                         @place_changed="setPlace"></gmap-autocomplete>
                                             </div>
                                         </b-field>
@@ -111,7 +120,7 @@
                                                 {!! $errors->has('telephone') ?
                                                 'type="is-danger" message="' . $errors->first('telephone') . '"' : '' !!}>
                                             <b-input name="telephone" required
-                                                     value="{{ old('telephone') }}"></b-input>
+                                                     value="{{ old('telephone', $producteur->telephone) }}"></b-input>
                                         </b-field>
                                     </div>
                                 </div>
@@ -125,7 +134,7 @@
                                             <b-input
                                                     type="textarea"
                                                     placeholder="Décrire en quelques mots le producteur."
-                                                    value="{{ old('bio') }}"
+                                                    value="{{ old('bio', $producteur->bio) }}"
                                                     name="bio"></b-input>
                                         </b-field>
                                     </div>
@@ -162,7 +171,7 @@
                 </div>
             </div>
         </div>
-    </prod-create-view>
+    </prod-edit-view>
 @endsection
 
 @push('styles')

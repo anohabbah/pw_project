@@ -91,7 +91,7 @@ class ProducteurController extends Controller
      */
     public function edit(Producteur $producteur)
     {
-        //
+        return view('producteurs.edit')->with('producteur', $producteur);
     }
 
     /**
@@ -99,12 +99,14 @@ class ProducteurController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Producteur  $producteur
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response|JsonResponse
      */
     public function update(Request $request, Producteur $producteur)
     {
-        $this->validator($request->all(), [
+        $data = $request->all();
+        $this->validator($data, [
             'email' => [
+                'sometimes',
                 'required',
                 'email',
                 'max:255',
@@ -119,7 +121,13 @@ class ProducteurController extends Controller
             'mot_de_passe' => 'sometimes|required|string|min:6|confirmed'
         ])->validate();
 
-        $producteur->update($request->all());
+        $this->updateProducer($data, $producteur);
+
+        if ($request->has('mot_de_passe')) {
+            $producteur->update(['mot_de_passe' => bcrypt($request->input('mot_de_passe'))]);
+        }
+
+        $this->updateProducerAccount($request, $producteur);
 
         if ($request->wantsJson()) {
             return new JsonResponse($producteur->fresh());
@@ -189,5 +197,23 @@ class ProducteurController extends Controller
 
         $rules = array_merge($defaultRules, $rules);
         return Validator::make($data, $rules, $customMessages);
+    }
+
+    /**
+     * @param array $data
+     * @param Producteur $producteur
+     * @return bool
+     */
+    protected function updateProducer(array $data, Producteur $producteur)
+    {
+        return $producteur->update([
+            'nom' => $data['nom'],
+//            'email' => $data['email'],
+            'telephone' => $data['telephone'],
+            'adresse' => $data['adresse'],
+            'bio' => $data['bio'],
+            'longitude' => $data['longitude'],
+            'latitude' => $data['latitude']
+        ]);
     }
 }
