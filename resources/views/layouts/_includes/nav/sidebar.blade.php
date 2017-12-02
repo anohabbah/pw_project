@@ -27,13 +27,5 @@
                 </a>
             </li>
         </ul>
-        <p class="menu-label">
-            Administration
-        </p>
-        <ul class="menu-list">
-            <li><a>Team Settings</a></li>
-            <li><a>Invitations</a></li>
-            <li><a>Authentication</a></li>
-        </ul>
     </aside>
 </div>

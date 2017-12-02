@@ -52890,6 +52890,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             phone: this.subject.telephone,
             desc: this.subject.bio,
             adresse: this.subject.adresse,
+            isTooltipActive: this.subject.actif !== "1",
+            accountState: this.subject.actif === "1" ? 'Activé' : 'Suspendu',
+            adresseVisible: this.subject.adresse_visible === "1" ? 'Visible' : 'Non Visible',
             marker: {
                 lat: parseFloat(this.subject.latitude),
                 lng: parseFloat(this.subject.longitude)
@@ -52929,7 +52932,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
                 _this.isLoading = false;
                 _this.isEditName = false;
-                _this.toast();
+                _this.toast('Mise à jour réussie');
             }).catch(function (err) {
                 console.log(err);
             });
@@ -52946,7 +52949,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this2.desc = _this2.producer.bio;
                 _this2.isLoading = false;
                 _this2.isEditingDesc = false;
-                _this2.toast();
+                _this2.toast('Mise à jour réussie');
             }).catch(function (err) {
                 console.log(err);
             });
@@ -52963,7 +52966,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 var data = _ref3.data;
 
                 _this3.isLoading = false;
-                _this3.toast();
+                _this3.toast('Mise à jour réussie');
             });
         },
         setPlace: function setPlace(place) {
@@ -52983,8 +52986,33 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }
             });
         },
-        toast: function toast() {
-            this.$toast.open({ message: 'Mise à jour réussie !', type: 'is-success' });
+        toast: function toast(message) {
+            this.$toast.open({ message: message, type: 'is-success' });
+        },
+        performUpdateStatus: function performUpdateStatus(value) {
+            var _this5 = this;
+
+            var actif = value === 'Activé';
+            var params = { actif: actif };
+            axios.put('/account/' + this.producer.id_producteur + '/status', params).then(function (_ref4) {
+                var data = _ref4.data;
+
+                //                        this.producer = data;
+                _this5.isTooltipActive = false;
+
+                _this5.toast(actif ? "Compte activé" : "Compte désactivé");
+            });
+        },
+        performupdateAddressVisibility: function performupdateAddressVisibility(value) {
+            var _this6 = this;
+
+            var visibility = value === 'Visible';
+            var params = { adresse_visible: visibility };
+            axios.put('/address/' + this.producer.id_producteur + '/visibility', params).then(function (_ref5) {
+                var data = _ref5.data;
+
+                _this6.toast('Visibilité de l\'adresse modifiée');
+            });
         }
     }
 });
@@ -53105,7 +53133,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this3 = this;
 
             var params = { actif: subject.actif !== "1" };
-            axios.put('/producteurs/' + subject.id_producteur + '/status', params).then(function (_ref3) {
+            axios.put('/account/' + subject.id_producteur + '/status', params).then(function (_ref3) {
                 var data = _ref3.data;
 
                 _.forEach(_this3.producers, function (producer, index) {

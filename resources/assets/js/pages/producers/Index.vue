@@ -42,7 +42,7 @@
             },
             performStatusUpdate(subject) {
                 const params = {actif: subject.actif !== "1"};
-                axios.put('/producteurs/' + subject.id_producteur + '/status', params)
+                axios.put('/account/' + subject.id_producteur + '/status', params)
                     .then(({data}) => {
                         _.forEach(this.producers, (producer, index) => {
                             if (producer.id_producteur === data.id_producteur) {
