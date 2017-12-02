@@ -13,12 +13,21 @@ class Producteur extends Model
 
     protected $hidden = ['mot_de_passe'];
 
+    protected $with = ['media'];
+
     /**
      * @inherited
      */
     protected $primaryKey = 'id_producteur';
 
     public $timestamps = false;
+
+    protected $appends = ['gravatar'];
+
+    public function getGravatarAttribute()
+    {
+        return 'https://www.gravatar.com/avatar/' . md5($this->email);
+    }
 
     protected static function boot()
     {

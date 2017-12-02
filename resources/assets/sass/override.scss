@@ -12,3 +12,11 @@
     width: 100%;
   }
 }
+tr {
+  vertical-align: middle !important;
+}
+.table {
+  td, th {
+    vertical-align: middle;
+  }
+}

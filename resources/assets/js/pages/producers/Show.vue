@@ -13,6 +13,9 @@
                 phone: this.subject.telephone,
                 desc: this.subject.bio,
                 adresse: this.subject.adresse,
+                isTooltipActive: this.subject.actif !== "1",
+                accountState: this.subject.actif === "1" ? 'Activé' : 'Suspendu',
+                adresseVisible: this.subject.adresse_visible === "1" ? 'Visible' : 'Non Visible',
                 marker: {
                     lat: parseFloat(this.subject.latitude),
                     lng: parseFloat(this.subject.longitude)
@@ -48,7 +51,7 @@
                     .then(({data}) => {
                         this.isLoading = false;
                         this.isEditName = false;
-                        this.toast();
+                        this.toast('Mise à jour réussie');
                     })
                     .catch(err => {
                         console.log(err);
@@ -63,7 +66,7 @@
                         this.desc = this.producer.bio;
                         this.isLoading = false;
                         this.isEditingDesc = false;
-                        this.toast();
+                        this.toast('Mise à jour réussie');
                     })
                     .catch(err => {
                         console.log(err);
@@ -78,7 +81,7 @@
                 axios.put(App.producerUpdate, this.producer)
                     .then(({data}) => {
                         this.isLoading = false;
-                        this.toast()
+                        this.toast('Mise à jour réussie')
                     })
             },
             setPlace(place) {
@@ -96,8 +99,27 @@
                     }
                 })
             },
-            toast() {
-                this.$toast.open({message: 'Mise à jour réussie !', type: 'is-success'})
+            toast(message) {
+                this.$toast.open({message: message, type: 'is-success'})
+            },
+            performUpdateStatus(value) {
+                const actif = value === 'Activé';
+                const params = {actif: actif};
+                axios.put('/account/' + this.producer.id_producteur + '/status', params)
+                    .then(({data}) => {
+//                        this.producer = data;
+                        this.isTooltipActive = false;
+
+                        this.toast(actif ? "Compte activé" : "Compte désactivé");
+                    });
+            },
+            performupdateAddressVisibility(value) {
+                const visibility = value === 'Visible';
+                const params = {adresse_visible: visibility};
+                axios.put('/address/' + this.producer.id_producteur + '/visibility', params)
+                    .then(({data}) => {
+                        this.toast('Visibilité de l\'adresse modifiée');
+                    });
             }
         }
     }

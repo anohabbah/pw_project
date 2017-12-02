@@ -16,12 +16,18 @@ $sides: (top, bottom, left, right); // Leave this variable alone
 .is-circle {
   border-radius: 100% !important;
 }
-.img-circle {
+
+.img-circle, .img-thumbnail {
   border: 1px solid #dedede;
   background-color: #fff;
   padding: 3px;
   border-radius: 100% !important;
 }
+
+.img-thumbnail {
+  border-radius: 4px !important;
+}
+
 .profile-pic {
   display: block;
   width: 100px;
@@ -31,4 +37,10 @@ $sides: (top, bottom, left, right); // Leave this variable alone
     display: block;
     margin: 0 auto;
   }
+}
+
+.dot span {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
 }

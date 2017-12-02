@@ -5,16 +5,28 @@
             :subject="{{ $producteur }}"
             {{ $producteur->media
                 ? ':avatar="' . $producteur->media->url .'"'
-                : ':avatar="https://www.gravatar.com/avatar/' . md5($producteur->email) . '?s=100"' }}
+                : ':avatar="' . $producteur->gravatar .'"' }}
             inline-template v-cloak>
         <div class="colums m-b-70">
             <div class="column">
                 <div class="columns">
                     <div class="column is-half-desktop is-offset-one-quarter-desktop">
+                        <div class="m-b-10">
+                            <b-tooltip label="Ce compte est suspendu. Pour le réactiver veuillez cliquer ici."
+                                       multilined :active="isTooltipActive" always>
+                                <b-switch
+                                        v-model="accountState"
+                                        true-value="Activé"
+                                        false-value="Suspendu"
+                                        @input="performUpdateStatus"
+                                        type="is-success">@{{ accountState }}</b-switch>
+                            </b-tooltip>
+                        </div>
+
                         <div class="card">
                             <div class="card-header">
                                 <div class="card-header-title">
-                                    Photo de Profil
+                                    Informations personnelles
                                 </div>
                                 <a @click="isEditName = !isEditName" class="card-header-icon" aria-label="more options">
                                     <b-tooltip label="Modifier Profil" position="is-left">
@@ -86,7 +98,8 @@
                             <header class="card-header">
                                 <div class="card-header-title">Description du profil</div>
 
-                                <a @click="isEditingDesc = !isEditingDesc" class="card-header-icon" aria-label="more options">
+                                <a @click="isEditingDesc = !isEditingDesc" class="card-header-icon"
+                                   aria-label="more options">
                                     <b-tooltip label="Modifier la description" position="is-left">
                                         <b-icon icon="edit"></b-icon>
                                     </b-tooltip>
@@ -125,6 +138,16 @@
                             <div class="card-header">
                                 <div class="card-header-title">
                                     Coordonnées géographique
+                                </div>
+                                <div class="card-header-icon">
+                                    <b-tooltip position="is-left" multilined
+                                            label="Si activé, l'adresse apparaîtra sur le site.">
+                                        <b-switch
+                                                @input="performupdateAddressVisibility"
+                                                v-model="adresseVisible"
+                                                true-value="Visible"
+                                                false-value="Non Visible"></b-switch>
+                                    </b-tooltip>
                                 </div>
                             </div>
                             <div class="card-content">

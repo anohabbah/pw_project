@@ -19,22 +19,23 @@
                 type: Number,
                 default: null
             },
-            profileAvatar: {
-                type: Number,
-                default: null
+            avatar: {
+                type: String,
+                require: true
             }
         },
         data() {
             return {
                 position: {
-                    lng: this.lng,
                     lat: this.lat,
+                    lng: this.lng,
                 },
-                id_media: this.profileAvatar,
-                accountState: this.actif === 'on' ? 'Activé' : 'Non Activé',
-                addressState: this.adresseVisible === 'on' ? 'Visible' : 'Non Visible',
+                accountState: this.actif === 'on' || this.actif == 1 ? 'Activé' : 'Non Activé',
+                addressState: this.adresseVisible == 1 || this.adresseVisible === 'on' ? 'Visible' : 'Non Visible',
                 show: false,
-                imgDataUrl: '',
+                modifyPassword: false,
+                imgDataUrl: this.avatar,
+                passwordButtonText: 'Changer le mot de passe...',
                 headers: {
                     'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
                 }
@@ -49,7 +50,7 @@
                 this.imgDataUrl = imageDataUrl;
             },
             cropUploadSuccess(jsonData, field) {
-                this.id_media = jsonData.id_media;
+                console.log(field);
             },
             cropUploadFail(status, field) {
                 console.log(status);
@@ -57,6 +58,10 @@
             setPlace(place) {
                 this.position.lat = place.geometry.location.lat();
                 this.position.lng = place.geometry.location.lng();
+            },
+            togglePassword() {
+                this.modifyPassword = !this.modifyPassword;
+                this.passwordButtonText = this.modifyPassword ? 'Annuler le changement de mot de passe' : 'Changer le mot de passe...'
             }
         }
     }

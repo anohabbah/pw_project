@@ -16,16 +16,16 @@
             Producteurs
         </p>
         <ul class="menu-list">
-            <li><a>Listes des Producteurs</a></li>
-            <li><a href="{{ route('producteurs.create') }}" class="{{ page_active('producteurs.create') }}">Ajouter un Producteur</a></li>
-        </ul>
-        <p class="menu-label">
-            Administration
-        </p>
-        <ul class="menu-list">
-            <li><a>Team Settings</a></li>
-            <li><a>Invitations</a></li>
-            <li><a>Authentication</a></li>
+            <li>
+                <a class="{{ page_active('producteurs.create') }}" href="{{ route('producteurs.index') }}">
+                    Comptes
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('producteurs.create') }}" class="{{ page_active('producteurs.create') }}">
+                    Créer un compte
+                </a>
+            </li>
         </ul>
     </aside>
 </div>
