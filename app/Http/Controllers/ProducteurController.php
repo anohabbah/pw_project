@@ -38,20 +38,6 @@ class ProducteurController extends Controller
     }
 
     /**
-     * Update account status.
-     *
-     * @param Request $request
-     * @param Producteur $producteur
-     * @return Producteur
-     */
-    public function status(Request $request, Producteur $producteur)
-    {
-        $producteur->update(['actif' => $request->input('actif')]);
-
-        return $producteur->fresh();
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
