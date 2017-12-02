@@ -4315,6 +4315,7 @@ Vue.component('flash', __webpack_require__(253));
 
 Vue.component('cat-create-view', __webpack_require__(256));
 Vue.component('prod-create-view', __webpack_require__(258));
+Vue.component('prod-index-view', __webpack_require__(276));
 Vue.component('prod-edit-view', __webpack_require__(268));
 Vue.component('prod-show-view', __webpack_require__(270));
 
@@ -51021,8 +51022,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             console.log(status);
         },
         setPlace: function setPlace(place) {
-            this.lat = place.geometry.location.lat();
-            this.long = place.geometry.location.lng();
+            this.position.lat = place.geometry.location.lat();
+            this.position.lng = place.geometry.location.lng();
         }
     }
 });
@@ -52993,6 +52994,131 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 273 */,
+/* 274 */,
+/* 275 */,
+/* 276 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(3)
+/* script */
+var __vue_script__ = __webpack_require__(277)
+/* template */
+var __vue_template__ = null
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\pages\\producers\\Index.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-1b0cd4a0", Component.options)
+  } else {
+    hotAPI.reload("data-v-1b0cd4a0", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 277 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            producers: [],
+            isLoading: true,
+            isNarrowed: true,
+            isPaginated: true,
+            isHoverable: true,
+            perPage: 10,
+            isStriped: true
+        };
+    },
+    created: function created() {
+        this.fetch();
+    },
+
+    methods: {
+        fetch: function fetch() {
+            var _this = this;
+
+            axios.get('/producteurs/fetch').then(function (_ref) {
+                var data = _ref.data;
+
+                _this.producers = data;
+                _this.isLoading = false;
+            });
+        },
+        showProducerRoute: function showProducerRoute(id) {
+            return '/producteurs/' + id;
+        },
+        editProducerRoute: function editProducerRoute(id) {
+            return '/producteurs/' + id + '/edit';
+        },
+        destroy: function destroy(id) {
+            var _this2 = this;
+
+            axios.delete('producteurs/' + id).then(function (_ref2) {
+                var data = _ref2.data;
+
+                _.forEach(_this2.producers, function (producer, index) {
+                    if (producer.id_producteur === id) {
+                        _this2.producers.splice(index, 1);
+                    }
+                });
+
+                _this2.$toast.open({ message: "Compte supprimé !", type: "is-success" });
+            });
+        },
+        performStatusUpdate: function performStatusUpdate(subject) {
+            var _this3 = this;
+
+            var params = { actif: subject.actif !== "1" };
+            axios.put('/producteurs/' + subject.id_producteur + '/status', params).then(function (_ref3) {
+                var data = _ref3.data;
+
+                _.forEach(_this3.producers, function (producer, index) {
+                    if (producer.id_producteur === data.id_producteur) {
+                        producer.actif = data.actif;
+                    }
+                });
+
+                _this3.$toast.open({ message: "Statut du compte modifié !", type: "is-success" });
+            });
+        }
+    }
+});
 
 /***/ })
 /******/ ]);

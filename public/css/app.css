@@ -16053,11 +16053,16 @@ i.mce-i-backcolor {
   border-radius: 100% !important;
 }
 
-.img-circle {
+.img-circle,
+.img-thumbnail {
   border: 1px solid #dedede;
   background-color: #fff;
   padding: 3px;
   border-radius: 100% !important;
+}
+
+.img-thumbnail {
+  border-radius: 4px !important;
 }
 
 .profile-pic {
@@ -16069,6 +16074,12 @@ i.mce-i-backcolor {
 .profile-pic.is-centered {
   display: block;
   margin: 0 auto;
+}
+
+.dot span {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
 }
 
 .menu-label {
@@ -16085,6 +16096,15 @@ i.mce-i-backcolor {
 
 .select select {
   width: 100%;
+}
+
+tr {
+  vertical-align: middle !important;
+}
+
+.table td,
+.table th {
+  vertical-align: middle;
 }
 
 .sidebar {

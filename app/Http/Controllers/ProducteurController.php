@@ -24,7 +24,31 @@ class ProducteurController extends Controller
      */
     public function index()
     {
-        //
+        return view('producteurs.index');
+    }
+
+    /**
+     * Fetch all producer account.
+     *
+     * @return mixed
+     */
+    public function fetch()
+    {
+        return Producteur::orderBy('nom')->get();
+    }
+
+    /**
+     * Update account status.
+     *
+     * @param Request $request
+     * @param Producteur $producteur
+     * @return Producteur
+     */
+    public function status(Request $request, Producteur $producteur)
+    {
+        $producteur->update(['actif' => $request->input('actif')]);
+
+        return $producteur->fresh();
     }
 
     /**
@@ -140,11 +164,15 @@ class ProducteurController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Producteur  $producteur
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response|JsonResponse
      */
     public function destroy(Producteur $producteur)
     {
         $producteur->delete();
+
+        if (\request()->wantsJson()) {
+            return new JsonResponse($producteur);
+        }
 
         Session::flash('flash', 'Compte supprimé avec succès !');
         return redirect()->route('producteurs.index');

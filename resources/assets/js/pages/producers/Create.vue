@@ -55,8 +55,8 @@
                 console.log(status);
             },
             setPlace(place) {
-                this.lat = place.geometry.location.lat();
-                this.long = place.geometry.location.lng();
+                this.position.lat = place.geometry.location.lat();
+                this.position.lng = place.geometry.location.lng();
             }
         }
     }

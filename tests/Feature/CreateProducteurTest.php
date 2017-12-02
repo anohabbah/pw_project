@@ -50,7 +50,7 @@ class CreateProducteurTest extends TestCase
         $params = $this->prod->toArray();
 
         $this->patch(route('producteurs.update', $this->prod), $params);
-        $this->assertDatabaseHas('producteurs', $params);
+        $this->assertDatabaseHas('producteurs', ['id_producteur' => $this->prod->id_producteur]);
     }
 
     /** @test */
