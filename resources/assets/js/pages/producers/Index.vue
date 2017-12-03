@@ -29,13 +29,19 @@
                 return '/producteurs/' + id + '/edit';
             },
             destroy(id) {
+                let position;
                 axios.delete('producteurs/' + id)
                     .then(({data}) => {
+                        // Il n'est pas prudent de supprimer un élément dans un tableau qu'on est en train de parcourir
+                        // au risque de rencontrer un comportement non determiné du programme.
+                        // Le but est de parcourir le tableau, trouver l'index de l'élément qu'on veut supprimer et
+                        // plus tard quand on finir de parcourir le tableau, aller à cet index et supprimer l'élément.
                         _.forEach(this.producers, (producer, index) => {
-                            if (producer.id_producteur === id) {
-                                this.producers.splice(index, 1);
+                            if (producer.id_producteur === data.id_producteur) {
+                                position = index;
                             }
                         });
+                        this.producers.splice(position, 1);
 
                         this.$toast.open({message: "Compte supprimé !", type: "is-success"})
                     });
