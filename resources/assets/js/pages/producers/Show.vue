@@ -35,9 +35,11 @@
             },
             cropSuccess(imageDataUrl, field) {
                 this.imgDataUrl = imageDataUrl;
+                toast("Photo redimensionné avec succès.");
             },
             cropUploadSuccess(jsonData, field) {
                 this.id_media = jsonData.id_media;
+                toast('Photo téléchargée avec succès.')
             },
             cropUploadFail(status, field) {
                 console.log(status);
@@ -51,7 +53,7 @@
                     .then(({data}) => {
                         this.isLoading = false;
                         this.isEditName = false;
-                        this.toast('Mise à jour réussie');
+                        toast('Mise à jour réussie.');
                     })
                     .catch(err => {
                         console.log(err);
@@ -66,7 +68,7 @@
                         this.desc = this.producer.bio;
                         this.isLoading = false;
                         this.isEditingDesc = false;
-                        this.toast('Mise à jour réussie');
+                        toast('Mise à jour réussie.');
                     })
                     .catch(err => {
                         console.log(err);
@@ -81,26 +83,23 @@
                 axios.put(App.producerUpdate, this.producer)
                     .then(({data}) => {
                         this.isLoading = false;
-                        this.toast('Mise à jour réussie')
+                        toast('Mise à jour réussie.')
                     })
             },
             setPlace(place) {
                 this.marker.lat = place.geometry.location.lat();
                 this.marker.lng = place.geometry.location.lng();
 
-                this.$snackbar.open({
+                flash({
                     message: "Voulez-vous enregistrer cette nouvelle adresse ?",
                     type: 'is-info',
                     position: 'is-bottom',
-                    actionText: 'OK',
+                    actionText: 'Confirmer',
                     duration: 10000,
-                    onAction: () => {
+                    callback: () => {
                         this.performUpdateAdresse();
                     }
                 })
-            },
-            toast(message) {
-                this.$toast.open({message: message, type: 'is-success'})
             },
             performUpdateStatus(value) {
                 const actif = value === 'Activé';
@@ -110,7 +109,7 @@
 //                        this.producer = data;
                         this.isTooltipActive = false;
 
-                        this.toast(actif ? "Compte activé" : "Compte désactivé");
+                        toast(actif ? "Compte activé." : "Compte suspendu.");
                     });
             },
             performupdateAddressVisibility(value) {
@@ -118,7 +117,7 @@
                 const params = {adresse_visible: visibility};
                 axios.put('/address/' + this.producer.id_producteur + '/visibility', params)
                     .then(({data}) => {
-                        this.toast('Visibilité de l\'adresse modifiée');
+                        toast('Visibilité de l\'adresse modifiée avec succès.');
                     });
             }
         }

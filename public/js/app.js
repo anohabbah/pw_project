@@ -2547,17 +2547,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.flash(this.message);
         }
 
-        window.events.$on('flash', function (message) {
-            _this.flash(message);
+        window.events.$on('flash', function (data) {
+            return _this.flash(data);
+        });
+
+        window.events.$on('toast', function (message) {
+            return _this.toast(message);
         });
     },
 
     methods: {
-        flash: function flash(message) {
+        flash: function flash(data) {
             this.$snackbar.open({
-                message: message,
-                actionText: null
+                message: data.message,
+                actionText: data.actionText,
+                type: data.type,
+                position: data.position,
+                duration: data.duration,
+                onAction: data.callback
             });
+        },
+        toast: function toast(message) {
+            this.$toast.open({ message: message, type: 'is-success' });
         }
     }
 });
@@ -2639,9 +2650,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         cropSuccess: function cropSuccess(imageDataUrl, field) {
             this.imgDataUrl = imageDataUrl;
+            toast("Photo redimensionné avec succès.");
         },
         cropUploadSuccess: function cropUploadSuccess(jsonData, field) {
             this.id_media = jsonData.id_media;
+            toast('Photo téléchargée avec succès.');
         },
         cropUploadFail: function cropUploadFail(status, field) {
             console.log(status);
@@ -2789,8 +2802,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     }
                 });
                 _this2.producers.splice(position, 1);
-
-                _this2.$toast.open({ message: "Compte supprimé !", type: "is-success" });
+                toast("Compte supprimé.");
             });
         },
         performStatusUpdate: function performStatusUpdate(subject) {
@@ -2805,8 +2817,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         producer.actif = data.actif;
                     }
                 });
-
-                _this3.$toast.open({ message: "Statut du compte modifié !", type: "is-success" });
+                toast("Statut du compte modifié avec succès.");
             });
         }
     }
@@ -2859,9 +2870,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         cropSuccess: function cropSuccess(imageDataUrl, field) {
             this.imgDataUrl = imageDataUrl;
+            toast("Photo redimensionné avec succès.");
         },
         cropUploadSuccess: function cropUploadSuccess(jsonData, field) {
             this.id_media = jsonData.id_media;
+            toast('Photo téléchargée avec succès.');
         },
         cropUploadFail: function cropUploadFail(status, field) {
             console.log(status);
@@ -2878,7 +2891,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
                 _this.isLoading = false;
                 _this.isEditName = false;
-                _this.toast('Mise à jour réussie');
+                toast('Mise à jour réussie.');
             }).catch(function (err) {
                 console.log(err);
             });
@@ -2895,7 +2908,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this2.desc = _this2.producer.bio;
                 _this2.isLoading = false;
                 _this2.isEditingDesc = false;
-                _this2.toast('Mise à jour réussie');
+                toast('Mise à jour réussie.');
             }).catch(function (err) {
                 console.log(err);
             });
@@ -2912,7 +2925,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 var data = _ref3.data;
 
                 _this3.isLoading = false;
-                _this3.toast('Mise à jour réussie');
+                toast('Mise à jour réussie.');
             });
         },
         setPlace: function setPlace(place) {
@@ -2921,19 +2934,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.marker.lat = place.geometry.location.lat();
             this.marker.lng = place.geometry.location.lng();
 
-            this.$snackbar.open({
+            flash({
                 message: "Voulez-vous enregistrer cette nouvelle adresse ?",
                 type: 'is-info',
                 position: 'is-bottom',
-                actionText: 'OK',
+                actionText: 'Confirmer',
                 duration: 10000,
-                onAction: function onAction() {
+                callback: function callback() {
                     _this4.performUpdateAdresse();
                 }
             });
-        },
-        toast: function toast(message) {
-            this.$toast.open({ message: message, type: 'is-success' });
         },
         performUpdateStatus: function performUpdateStatus(value) {
             var _this5 = this;
@@ -2946,18 +2956,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 //                        this.producer = data;
                 _this5.isTooltipActive = false;
 
-                _this5.toast(actif ? "Compte activé" : "Compte désactivé");
+                toast(actif ? "Compte activé." : "Compte suspendu.");
             });
         },
         performupdateAddressVisibility: function performupdateAddressVisibility(value) {
-            var _this6 = this;
-
             var visibility = value === 'Visible';
             var params = { adresse_visible: visibility };
             axios.put('/address/' + this.producer.id_producteur + '/visibility', params).then(function (_ref5) {
                 var data = _ref5.data;
 
-                _this6.toast('Visibilité de l\'adresse modifiée');
+                toast('Visibilité de l\'adresse modifiée avec succès.');
             });
         }
     }
@@ -53030,7 +53038,16 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_1_vue2_google_maps__, {
 
 window.events = new Vue();
 window.flash = function (message) {
-    window.events.$emit('flash', message);
+    var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'is-primary';
+    var position = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'is-bottom-right';
+    var duration = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 3500;
+    var actionText = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : null;
+    var callback = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : null;
+
+    window.events.$emit('flash', { message: message, type: type, position: position, duration: duration, actionText: actionText, callback: callback });
+};
+window.toast = function (message) {
+    window.events.$emit('toast', message);
 };
 
 Vue.component('flash', __webpack_require__("./resources/assets/js/components/FlashComponent.vue"));

@@ -31,9 +31,7 @@
             @yield('content')
         @endauth
 
-        @if(session('flash'))
-            <flash message="{{ session('flash') }}"></flash>
-        @endif
+        <flash message="{{ session('flash') }}"></flash>
     </div>
 
     <script src="{{ mix('js/app.js') }}"></script>

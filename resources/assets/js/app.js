@@ -15,8 +15,11 @@ Vue.use(VueGoogleMaps, {
 
 
 window.events = new Vue();
-window.flash = function (message) {
-    window.events.$emit('flash', message);
+window.flash = function (message, type = 'is-primary', position = 'is-bottom-right', duration = 3500, actionText = null, callback = null) {
+    window.events.$emit('flash', {message, type, position, duration, actionText, callback});
+};
+window.toast = function (message) {
+    window.events.$emit('toast', message);
 };
 
 Vue.component('flash', require('./components/FlashComponent.vue'));

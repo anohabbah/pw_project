@@ -47,9 +47,11 @@
             },
             cropSuccess(imageDataUrl, field) {
                 this.imgDataUrl = imageDataUrl;
+                toast("Photo redimensionné avec succès.");
             },
             cropUploadSuccess(jsonData, field) {
                 this.id_media = jsonData.id_media;
+                toast('Photo téléchargée avec succès.')
             },
             cropUploadFail(status, field) {
                 console.log(status);

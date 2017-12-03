@@ -16082,6 +16082,10 @@ i.mce-i-backcolor {
   white-space: nowrap !important;
 }
 
+[v-cloak] {
+  display: none;
+}
+
 .menu-label {
   margin-left: 0.75em;
 }

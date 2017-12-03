@@ -42,8 +42,7 @@
                             }
                         });
                         this.producers.splice(position, 1);
-
-                        this.$toast.open({message: "Compte supprimé !", type: "is-success"})
+                        toast("Compte supprimé.")
                     });
             },
             performStatusUpdate(subject) {
@@ -55,8 +54,7 @@
                                 producer.actif = data.actif;
                             }
                         });
-
-                        this.$toast.open({message: "Statut du compte modifié !", type: "is-success"})
+                        toast("Statut du compte modifié avec succès.");
                     });
             }
         }

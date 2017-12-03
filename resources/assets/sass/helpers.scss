@@ -44,3 +44,7 @@ $sides: (top, bottom, left, right); // Leave this variable alone
   text-overflow: ellipsis !important;
   white-space: nowrap !important;
 }
+
+[v-cloak] {
+  display: none;
+}

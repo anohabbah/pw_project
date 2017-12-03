@@ -8,16 +8,28 @@
                 this.flash(this.message);
             }
 
-            window.events.$on('flash', message => {
-                this.flash(message);
-            });
+            window.events.$on(
+                'flash', data => this.flash(data)
+            );
+
+            window.events.$on(
+                'toast', message => this.toast(message)
+            );
         },
         methods: {
-            flash(message) {
+            flash(data) {
                 this.$snackbar.open({
-                    message: message,
-                    actionText: null
+                    message: data.message,
+                    actionText: data.actionText,
+                    type: data.type,
+                    position: data.position,
+                    duration: data.duration,
+                    onAction: data.callback
                 });
+            },
+
+            toast(message) {
+                this.$toast.open({message: message, type: 'is-success'});
             }
         }
     }
