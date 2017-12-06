@@ -154,7 +154,7 @@
                                 <div class="content">
                                     <b-field>
                                         <gmap-autocomplete
-                                                v-model="adresse" class="input"
+                                                name="address" v-model="address" class="input"
                                                 @place_changed="setPlace"></gmap-autocomplete>
                                     </b-field>
                                 </div>

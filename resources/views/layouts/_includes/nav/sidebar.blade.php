@@ -17,7 +17,7 @@
         </p>
         <ul class="menu-list">
             <li>
-                <a class="{{ page_active('producteurs.create') }}" href="{{ route('producteurs.index') }}">
+                <a class="{{ page_active('producteurs.index') }}" href="{{ route('producteurs.index') }}">
                     Comptes
                 </a>
             </li>

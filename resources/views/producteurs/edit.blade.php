@@ -16,7 +16,7 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="card-header-title">
-                            Producteurs
+                            Modification du compte
                         </div>
                     </div>
                     <div class="card-content">
@@ -57,22 +57,25 @@
                                                 </div>
                                             </div>
                                         </b-field>
-
+                                    </div>
+                                </div>
+                                <div class="columns">
+                                    <div class="column is-half-desktop">
                                         <b-field label="Nom du producteur"
                                                 {!! $errors->has('nom') ?
                                                 'type="is-danger" message="' . $errors->first('nom') . '"' : '' !!}>
                                             <b-input name="nom" required
-                                                     maxLength="100"
                                                      value="{{ old('nom', $producteur->nom) }}"></b-input>
                                         </b-field>
 
                                         <b-field label="Adresse électronique"
                                                 {!! $errors->has('email') ?
                                                 'type="is-danger" message="' . $errors->first('email') . '"' : '' !!}>
-                                            <b-input name="email" required maxLength="100"
+                                            <b-input name="email" required
                                                      value="{{ old('email', $producteur->email) }}" disabled></b-input>
                                         </b-field>
-
+                                    </div>
+                                    <div class="column is-half-desktop">
                                         <b-field label="Mot de passe">
                                             <a @click="togglePassword"
                                                     class="button" v-text="passwordButtonText"></a>
@@ -82,7 +85,7 @@
                                             <b-field
                                                     {!! $errors->has('mot_de_passe') ?
                                                     'type="is-danger" message="' . $errors->first('mot_de_passe') . '"' : '' !!}>
-                                                <b-input type="password" required minLength="6" :has-counter="false"
+                                                <b-input type="password" required minLength="6"
                                                          password-reveal name="mot_de_passe"></b-input>
                                             </b-field>
                                             <b-field label="Confirmer le mot de passe">
@@ -90,7 +93,10 @@
                                                          name="mot_de_passe_confirmation"></b-input>
                                             </b-field>
                                         </div>
-
+                                    </div>
+                                </div>
+                                <div class="columns">
+                                    <div class="column is-half-desktop">
                                         <b-field label="Adresse postale du producteur"
                                                 {!! $errors->has('adresse') ?
                                           'type="is-danger" message="' . $errors->first('adresse') . '"' : '' !!}>
@@ -102,7 +108,9 @@
                                                         @place_changed="setPlace"></gmap-autocomplete>
                                             </div>
                                         </b-field>
-                                        <b-field>
+                                    </div>
+                                    <div class="column is-half-desktop">
+                                        <b-field label="Visibilité de l'adresse">
                                             <b-tooltip
                                                     label="Active/Désactive la visibilité de l'adresse sur le site"
                                                     position="is-right" multilined>
@@ -115,7 +123,11 @@
                                                 </b-switch>
                                             </b-tooltip>
                                         </b-field>
+                                    </div>
+                                </div>
 
+                                <div class="columns">
+                                    <div class="column is-half-desktop">
                                         <b-field label="Numéro de téléphone"
                                                 {!! $errors->has('telephone') ?
                                                 'type="is-danger" message="' . $errors->first('telephone') . '"' : '' !!}>
@@ -123,9 +135,6 @@
                                                      value="{{ old('telephone', $producteur->telephone) }}"></b-input>
                                         </b-field>
                                     </div>
-                                </div>
-
-                                <div class="columns">
                                     <div class="column is-half-desktop">
                                         <b-field
                                                 label="Biographie du producteur"

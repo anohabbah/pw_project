@@ -12,7 +12,7 @@
                 email: this.subject.email,
                 phone: this.subject.telephone,
                 desc: this.subject.bio,
-                adresse: this.subject.adresse,
+                address: this.subject.adresse,
                 isTooltipActive: this.subject.actif !== "1",
                 accountState: this.subject.actif === "1" ? 'Activé' : 'Suspendu',
                 adresseVisible: this.subject.adresse_visible === "1" ? 'Visible' : 'Non Visible',
@@ -74,8 +74,8 @@
                         console.log(err);
                     });
             },
-            performUpdateAdresse() {
-                this.producer.adresse = this.adresse;
+            performUpdateAddress() {
+                this.producer.adresse = document.getElementsByName('address')[0].value;
                 this.producer.latitude = this.marker.lat;
                 this.producer.longitude = this.marker.lng;
 
@@ -85,21 +85,18 @@
                         this.isLoading = false;
                         toast('Modification d\'adresse réussie.');
                     })
+                    .catch(err => {
+                        console.log(err);
+                    });
             },
             setPlace(place) {
                 this.marker.lat = place.geometry.location.lat();
                 this.marker.lng = place.geometry.location.lng();
 
-                flash({
-                    message: "Voulez-vous enregistrer cette nouvelle adresse ?",
-                    type: 'is-info',
-                    position: 'is-bottom',
-                    actionText: 'Confirmer',
-                    duration: 10000,
-                    callback: () => {
-                        this.performUpdateAdresse();
-                    }
-                })
+                flash("Voulez-vous enregistrer la nouvelle adresse ?", 'is-info', 'is-bottom', 10000, 'Oui',
+                    () => {
+                        this.performUpdateAddress();
+                    });
             },
             performUpdateStatus(value) {
                 const actif = value === 'Activé';

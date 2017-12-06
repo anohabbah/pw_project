@@ -2846,7 +2846,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             email: this.subject.email,
             phone: this.subject.telephone,
             desc: this.subject.bio,
-            adresse: this.subject.adresse,
+            address: this.subject.adresse,
             isTooltipActive: this.subject.actif !== "1",
             accountState: this.subject.actif === "1" ? 'Activé' : 'Suspendu',
             adresseVisible: this.subject.adresse_visible === "1" ? 'Visible' : 'Non Visible',
@@ -2913,10 +2913,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 console.log(err);
             });
         },
-        performUpdateAdresse: function performUpdateAdresse() {
+        performUpdateAddress: function performUpdateAddress() {
             var _this3 = this;
 
-            this.producer.adresse = this.adresse;
+            this.producer.adresse = document.getElementsByName('address')[0].value;
             this.producer.latitude = this.marker.lat;
             this.producer.longitude = this.marker.lng;
 
@@ -2926,6 +2926,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
                 _this3.isLoading = false;
                 toast('Modification d\'adresse réussie.');
+            }).catch(function (err) {
+                console.log(err);
             });
         },
         setPlace: function setPlace(place) {
@@ -2934,15 +2936,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.marker.lat = place.geometry.location.lat();
             this.marker.lng = place.geometry.location.lng();
 
-            flash({
-                message: "Voulez-vous enregistrer cette nouvelle adresse ?",
-                type: 'is-info',
-                position: 'is-bottom',
-                actionText: 'Confirmer',
-                duration: 10000,
-                callback: function callback() {
-                    _this4.performUpdateAdresse();
-                }
+            flash("Voulez-vous enregistrer la nouvelle adresse ?", 'is-info', 'is-bottom', 10000, 'Oui', function () {
+                _this4.performUpdateAddress();
             });
         },
         performUpdateStatus: function performUpdateStatus(value) {
