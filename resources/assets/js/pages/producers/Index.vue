@@ -16,21 +16,21 @@
         },
         methods: {
             fetch() {
-                axios.get('/producteurs/fetch')
+                axios.get(route('producteurs.fetch'))
                     .then(({data}) => {
                         this.producers = data;
                         this.isLoading = false;
                     });
             },
             showProducerRoute(id) {
-                return '/producteurs/' + id;
+                return route('producteurs.show', id);
             },
             editProducerRoute(id) {
-                return '/producteurs/' + id + '/edit';
+                return route('producteurs.show', id);
             },
             destroy(id) {
                 let position;
-                axios.delete('producteurs/' + id)
+                axios.delete(route('producteurs.destroy', id))
                     .then(({data}) => {
                         // Il n'est pas prudent de supprimer un élément dans un tableau qu'on est en train de parcourir
                         // au risque de rencontrer un comportement non determiné du programme.
@@ -42,19 +42,19 @@
                             }
                         });
                         this.producers.splice(position, 1);
-                        toast("Compte supprimé.")
+                        toast("Suppression du compte réussie.")
                     });
             },
             performStatusUpdate(subject) {
                 const params = {actif: subject.actif !== "1"};
-                axios.put('/account/' + subject.id_producteur + '/status', params)
+                axios.put(route('status.update', subject.id_producteur), params)
                     .then(({data}) => {
                         _.forEach(this.producers, (producer, index) => {
                             if (producer.id_producteur === data.id_producteur) {
                                 producer.actif = data.actif;
                             }
                         });
-                        toast("Statut du compte modifié avec succès.");
+                        toast("Modification du statut réussie.");
                     });
             }
         }

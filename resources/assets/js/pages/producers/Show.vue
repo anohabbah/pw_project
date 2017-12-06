@@ -35,11 +35,11 @@
             },
             cropSuccess(imageDataUrl, field) {
                 this.imgDataUrl = imageDataUrl;
-                toast("Photo redimensionné avec succès.");
+                toast("Redimensionnement réussi.");
             },
             cropUploadSuccess(jsonData, field) {
                 this.id_media = jsonData.id_media;
-                toast('Photo téléchargée avec succès.')
+                toast('Téléchargement de la photo réussi.')
             },
             cropUploadFail(status, field) {
                 console.log(status);
@@ -49,7 +49,7 @@
                 this.producer.nom = this.nom;
                 this.producer.telephone = this.phone;
 
-                axios.put(App.producerUpdate, this.producer)
+                axios.put(route('producteurs.update', this.producer.id_producteur), this.producer)
                     .then(({data}) => {
                         this.isLoading = false;
                         this.isEditName = false;
@@ -63,7 +63,7 @@
                 this.isLoading = true;
                 this.producer.bio = tinyMCE.activeEditor.getContent();
 
-                axios.put(App.producerUpdate, this.producer)
+                axios.put(route('producteurs.update', this.producer.id_producteur), this.producer)
                     .then(({data}) => {
                         this.desc = this.producer.bio;
                         this.isLoading = false;
@@ -80,10 +80,10 @@
                 this.producer.longitude = this.marker.lng;
 
                 this.isLoading = true;
-                axios.put(App.producerUpdate, this.producer)
+                axios.put(route('producteurs.update', this.producer.id_producteur), this.producer)
                     .then(({data}) => {
                         this.isLoading = false;
-                        toast('Mise à jour réussie.')
+                        toast('Modification d\'adresse réussie.');
                     })
             },
             setPlace(place) {
@@ -104,20 +104,19 @@
             performUpdateStatus(value) {
                 const actif = value === 'Activé';
                 const params = {actif: actif};
-                axios.put('/account/' + this.producer.id_producteur + '/status', params)
+                axios.put(route('status.update', this.producer.id_producteur), params)
                     .then(({data}) => {
-//                        this.producer = data;
                         this.isTooltipActive = false;
 
                         toast(actif ? "Compte activé." : "Compte suspendu.");
                     });
             },
-            performupdateAddressVisibility(value) {
+            performUpdateAddressVisibility(value) {
                 const visibility = value === 'Visible';
                 const params = {adresse_visible: visibility};
-                axios.put('/address/' + this.producer.id_producteur + '/visibility', params)
+                axios.put(route('address.update', this.producer.id_producteur), params)
                     .then(({data}) => {
-                        toast('Visibilité de l\'adresse modifiée avec succès.');
+                        toast('Modification de la visibilité de l\'adresse réussie.');
                     });
             }
         }

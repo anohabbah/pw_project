@@ -34,6 +34,7 @@
         <flash message="{{ session('flash') }}"></flash>
     </div>
 
+    @routes
     <script src="{{ mix('js/app.js') }}"></script>
     @stack('scripts')
 </body>

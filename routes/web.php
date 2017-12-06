@@ -17,9 +17,9 @@ Auth::routes();
 
 Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
 Route::resource('categories', 'CategoryController');
-Route::get('/producteurs/fetch', 'ProducteurController@fetch');
+Route::get('/producteurs/fetch', 'ProducteurController@fetch')->name('producteurs.fetch');
 Route::resource('producteurs', 'ProducteurController');
 Route::post('/upload/profile/pic', 'MediaController@store')->name('media.store');
 Route::post('/profile/{producteur}/avatar', 'MediaController@update')->name('media.update');
-Route::put('/address/{producteur}/visibility', 'AddressController@update');
-Route::put('/account/{producteur}/status', 'AccountController@update');
+Route::put('/address/{producteur}/visibility', 'AddressController@update')->name('address.update');
+Route::put('/account/{producteur}/status', 'AccountController@update')->name('status.update');

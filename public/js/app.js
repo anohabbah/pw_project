@@ -2650,11 +2650,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         cropSuccess: function cropSuccess(imageDataUrl, field) {
             this.imgDataUrl = imageDataUrl;
-            toast("Photo redimensionné avec succès.");
+            toast("Redimensionnement réussi.");
         },
         cropUploadSuccess: function cropUploadSuccess(jsonData, field) {
             this.id_media = jsonData.id_media;
-            toast('Photo téléchargée avec succès.');
+            toast('Téléchargement de la photo réussi.');
         },
         cropUploadFail: function cropUploadFail(status, field) {
             console.log(status);
@@ -2772,7 +2772,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         fetch: function fetch() {
             var _this = this;
 
-            axios.get('/producteurs/fetch').then(function (_ref) {
+            axios.get(route('producteurs.fetch')).then(function (_ref) {
                 var data = _ref.data;
 
                 _this.producers = data;
@@ -2780,16 +2780,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         showProducerRoute: function showProducerRoute(id) {
-            return '/producteurs/' + id;
+            return route('producteurs.show', id);
         },
         editProducerRoute: function editProducerRoute(id) {
-            return '/producteurs/' + id + '/edit';
+            return route('producteurs.show', id);
         },
         destroy: function destroy(id) {
             var _this2 = this;
 
             var position = void 0;
-            axios.delete('producteurs/' + id).then(function (_ref2) {
+            axios.delete(route('producteurs.destroy', id)).then(function (_ref2) {
                 var data = _ref2.data;
 
                 // Il n'est pas prudent de supprimer un élément dans un tableau qu'on est en train de parcourir
@@ -2802,14 +2802,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     }
                 });
                 _this2.producers.splice(position, 1);
-                toast("Compte supprimé.");
+                toast("Suppression du compte réussie.");
             });
         },
         performStatusUpdate: function performStatusUpdate(subject) {
             var _this3 = this;
 
             var params = { actif: subject.actif !== "1" };
-            axios.put('/account/' + subject.id_producteur + '/status', params).then(function (_ref3) {
+            axios.put(route('status.update', subject.id_producteur), params).then(function (_ref3) {
                 var data = _ref3.data;
 
                 _.forEach(_this3.producers, function (producer, index) {
@@ -2817,7 +2817,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         producer.actif = data.actif;
                     }
                 });
-                toast("Statut du compte modifié avec succès.");
+                toast("Modification du statut réussie.");
             });
         }
     }
@@ -2870,11 +2870,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         cropSuccess: function cropSuccess(imageDataUrl, field) {
             this.imgDataUrl = imageDataUrl;
-            toast("Photo redimensionné avec succès.");
+            toast("Redimensionnement réussi.");
         },
         cropUploadSuccess: function cropUploadSuccess(jsonData, field) {
             this.id_media = jsonData.id_media;
-            toast('Photo téléchargée avec succès.');
+            toast('Téléchargement de la photo réussi.');
         },
         cropUploadFail: function cropUploadFail(status, field) {
             console.log(status);
@@ -2886,7 +2886,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.producer.nom = this.nom;
             this.producer.telephone = this.phone;
 
-            axios.put(App.producerUpdate, this.producer).then(function (_ref) {
+            axios.put(route('producteurs.update', this.producer.id_producteur), this.producer).then(function (_ref) {
                 var data = _ref.data;
 
                 _this.isLoading = false;
@@ -2902,7 +2902,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.isLoading = true;
             this.producer.bio = tinyMCE.activeEditor.getContent();
 
-            axios.put(App.producerUpdate, this.producer).then(function (_ref2) {
+            axios.put(route('producteurs.update', this.producer.id_producteur), this.producer).then(function (_ref2) {
                 var data = _ref2.data;
 
                 _this2.desc = _this2.producer.bio;
@@ -2921,11 +2921,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.producer.longitude = this.marker.lng;
 
             this.isLoading = true;
-            axios.put(App.producerUpdate, this.producer).then(function (_ref3) {
+            axios.put(route('producteurs.update', this.producer.id_producteur), this.producer).then(function (_ref3) {
                 var data = _ref3.data;
 
                 _this3.isLoading = false;
-                toast('Mise à jour réussie.');
+                toast('Modification d\'adresse réussie.');
             });
         },
         setPlace: function setPlace(place) {
@@ -2950,22 +2950,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             var actif = value === 'Activé';
             var params = { actif: actif };
-            axios.put('/account/' + this.producer.id_producteur + '/status', params).then(function (_ref4) {
+            axios.put(route('status.update', this.producer.id_producteur), params).then(function (_ref4) {
                 var data = _ref4.data;
 
-                //                        this.producer = data;
                 _this5.isTooltipActive = false;
 
                 toast(actif ? "Compte activé." : "Compte suspendu.");
             });
         },
-        performupdateAddressVisibility: function performupdateAddressVisibility(value) {
+        performUpdateAddressVisibility: function performUpdateAddressVisibility(value) {
             var visibility = value === 'Visible';
             var params = { adresse_visible: visibility };
-            axios.put('/address/' + this.producer.id_producteur + '/visibility', params).then(function (_ref5) {
+            axios.put(route('address.update', this.producer.id_producteur), params).then(function (_ref5) {
                 var data = _ref5.data;
 
-                toast('Visibilité de l\'adresse modifiée avec succès.');
+                toast('Modification de la visibilité de l\'adresse réussie.');
             });
         }
     }

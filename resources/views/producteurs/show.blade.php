@@ -143,7 +143,7 @@
                                     <b-tooltip position="is-left" multilined
                                             label="Si activé, l'adresse apparaîtra sur le site.">
                                         <b-switch
-                                                @input="performupdateAddressVisibility"
+                                                @input="performUpdateAddressVisibility"
                                                 v-model="adresseVisible"
                                                 true-value="Visible"
                                                 false-value="Non Visible"></b-switch>
@@ -177,7 +177,6 @@
 @push('styles')
     <script>
         App = {!! json_encode([
-            'producerUpdate' => route('producteurs.update', $producteur),
             'baseDir' => public_path()
         ]) !!}
     </script>
