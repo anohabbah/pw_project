@@ -16,6 +16,9 @@ et configurer la base de données.
 Après la configuration de la base de données, executer cette commande à la racine du projet:<br> ``php artisan migrate --seed``.<br>
 Elle créera les différentes tables et générera de fausses données.
 
+Avant de lancer l'application, il faut générer la clé de cryptage (sel) pour les sessions utilisateurs, pour les mots de passes, etc. 
+Pour cela, il faut exexuter cette commande:<br> ``php artisan key:generate`` 
+
 A ce niveau, vous pouvez lancer l'application en executant la commande suivante:<br> ``php artisan serve``<br> et dans votre 
 navigateur aller sur le lien suivant: ``http://127.0.0.1:8000``.
 
